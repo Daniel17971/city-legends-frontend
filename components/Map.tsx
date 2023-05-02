@@ -15,7 +15,7 @@ function Map() {
 
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(true);
   const listOfLocations = [
     {
       title: "test-1",
@@ -44,6 +44,7 @@ function Map() {
   ];
 
   useEffect(() => {
+    setIsLoading(true);
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
         if (status !== "granted") {
@@ -59,6 +60,7 @@ function Map() {
         return data;
       })
       .then((data) => {
+        setIsLoading(false);
         setFilteredLocations((currentFilteredLocations) => {
           return listOfLocations.filter((item) => {
             return (
@@ -101,28 +103,32 @@ function Map() {
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
-  console.log(filteredLocations);
+
   return (
     <View style={styles.container}>
-      <MapView
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        initialRegion={initialPosition}
-        onRegionChange={onRegionChange}
-      >
-        {filteredLocations
-          ? filteredLocations.map((item, index) => {
-              return (
-                <Marker
-                  key={index}
-                  coordinate={item.location}
-                  title={item.title}
-                  description={item.description}
-                />
-              );
-            })
-          : null}
-      </MapView>
+      {isLoading ? (
+        <Text>... is loading</Text>
+      ) : (
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={styles.map}
+          initialRegion={initialPosition}
+          onRegionChange={onRegionChange}
+        >
+          {filteredLocations
+            ? filteredLocations.map((item, index) => {
+                return (
+                  <Marker
+                    key={index}
+                    coordinate={item.location}
+                    title={item.title}
+                    description={item.description}
+                  />
+                );
+              })
+            : null}
+        </MapView>
+      )}
     </View>
   );
 }
