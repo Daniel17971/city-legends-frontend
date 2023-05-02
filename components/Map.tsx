@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
+
 function Map() {
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
@@ -10,8 +11,10 @@ function Map() {
   const aspectRatio = width / height;
   const latitudeDelta = 0.02;
   const longitudeDelta = latitudeDelta * aspectRatio;
+  const radius = 600;
 
   const [initialPosition, setInitialPosition] = useState(null);
+  const [filteredLocations, setFilteredLocations] = useState(null);
 
   const listOfLocations = [
     {
@@ -25,8 +28,8 @@ function Map() {
     {
       title: "test-2",
       location: {
-        latitude: 55.1,
-        longitude: 3.1,
+        latitude: 45.761499546355104,
+        longitude: 4.8555995726222445,
       },
       description: "this is about the test-1 location",
     },
@@ -56,6 +59,19 @@ function Map() {
         return data;
       })
       .then((data) => {
+        setFilteredLocations((currentFilteredLocations) => {
+          return listOfLocations.filter((item) => {
+            return (
+              radius >
+              getDistanceFromLatLonInKm(
+                data.coords.latitude,
+                data.coords.longitude,
+                item.location.latitude,
+                item.location.longitude
+              )
+            );
+          });
+        });
         return setInitialPosition((currentPostition) => {
           return {
             latitudeDelta,
@@ -67,6 +83,25 @@ function Map() {
       });
   }, [setLocation, setInitialPosition]);
 
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    let R = 6371; // Radius of the earth in km
+    let dLat = deg2rad(lat2 - lat1); // deg2rad below
+    let dLon = deg2rad(lon2 - lon1);
+    let a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let d = R * c; // Distance in km
+    return d;
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
   return (
     <View style={styles.container}>
       <MapView
@@ -74,7 +109,18 @@ function Map() {
         style={styles.map}
         initialRegion={initialPosition}
         onRegionChange={onRegionChange}
-      ></MapView>
+      >
+        {filteredLocations.map((item, index) => {
+          return (
+            <Marker
+              key={index}
+              coordinate={item.location}
+              title={item.title}
+              description={item.description}
+            />
+          );
+        })}
+      </MapView>
     </View>
   );
 }
