@@ -101,7 +101,7 @@ function Map() {
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
-
+  console.log(filteredLocations);
   return (
     <View style={styles.container}>
       <MapView
@@ -110,16 +110,18 @@ function Map() {
         initialRegion={initialPosition}
         onRegionChange={onRegionChange}
       >
-        {filteredLocations.map((item, index) => {
-          return (
-            <Marker
-              key={index}
-              coordinate={item.location}
-              title={item.title}
-              description={item.description}
-            />
-          );
-        })}
+        {filteredLocations
+          ? filteredLocations.map((item, index) => {
+              return (
+                <Marker
+                  key={index}
+                  coordinate={item.location}
+                  title={item.title}
+                  description={item.description}
+                />
+              );
+            })
+          : null}
       </MapView>
     </View>
   );
