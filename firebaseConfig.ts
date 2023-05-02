@@ -4,9 +4,6 @@ require("dotenv").config({
 // Import the functions you need from the SDKs you need
 const { initializeApp } = require("firebase/app");
 const { getAuth } = require("firebase/auth");
-const { getDatabase } = require("firebase/database");
-const admin = require("firebase-admin");
-const { serviceAccount } = require("./admin/admin");
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,7 +20,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 //Initialize Auth
-const auth = getAuth(app);
+export const auth = getAuth(app);
