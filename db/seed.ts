@@ -1,6 +1,7 @@
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, child, get } from "firebase/database";
 import { faker } from "@faker-js/faker";
 import { app } from "../firebaseConfig";
+const db = getDatabase(app);
 
 function writeLegendData(legendId: string, legendObj: object) {
   const db = getDatabase(app);
@@ -49,3 +50,5 @@ function generateTestLegends(numOfLegends: number) {
 // Seed test DB
 generateTestUsers(3);
 generateTestLegends(3);
+
+db.off();

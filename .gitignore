@@ -20,3 +20,9 @@ web-build/
 
 .env.test
 .env.production
+
+# JS to ignore
+
+seed.js
+firebaseConfig.js
+
