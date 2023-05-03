@@ -3,8 +3,8 @@ import { app } from "../firebaseConfig";
 
 const dbRef = ref(getDatabase(app));
 
-const getLegends = () => {
-  get(child(dbRef, `/legends`))
+export const getLegends = () => {
+  return get(child(dbRef, `/legends`))
     .then((snapshot) => {
       if (snapshot.exists()) {
         return snapshot.val();

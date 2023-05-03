@@ -1,26 +1,15 @@
-require("dotenv").config({
-  path: `${__dirname}/.env.test`,
-});
-// Import the functions you need from the SDKs you need
-const { initializeApp } = require("firebase/app");
-const { getAuth } = require("firebase/auth");
+import { initializeApp }from "firebase/app";
+import { getAuth } from "firebase/auth";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "city-legends-19cb4.firebaseapp.com",
-  databaseURL: process.env.DATABASE_URL,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
   projectId: "city-legends-19cb4",
   storageBucket: "city-legends-19cb4.appspot.com",
   messagingSenderId: "1021424180412",
   appId: "1:1021424180412:web:e67b2c1818721c7f5504b9",
 };
 
-// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-
-//Initialize Auth
 export const auth = getAuth(app);
