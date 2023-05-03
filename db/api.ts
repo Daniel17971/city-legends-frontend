@@ -9,7 +9,7 @@ const getLegends = () => {
       if (snapshot.exists()) {
         return snapshot.val();
       } else {
-        return "No data found";
+        console.log("No data found");
       }
     })
     .catch((error) => {
