@@ -23,6 +23,7 @@ web-build/
 
 # JS to ignore
 
-seed.js
+
 firebaseConfig.js
+
 
