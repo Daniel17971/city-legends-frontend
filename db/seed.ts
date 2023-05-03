@@ -40,8 +40,10 @@ function generateTestLegends(numOfLegends: number) {
       title: faker.lorem.words(Math.floor(Math.random() * 6 + 10)),
       body: faker.lorem.words(Math.floor(Math.random() * 170 + 31)),
       author: usersIdArr[Math.floor(Math.random() * usersIdArr.length)],
-      lat: coordinates[0],
-      long: coordinates[1],
+      location: {
+        lat: coordinates[0],
+        long: coordinates[1],
+      }
     };
     writeLegendData(legendId, legend);
   }
@@ -51,4 +53,3 @@ function generateTestLegends(numOfLegends: number) {
 generateTestUsers(3);
 generateTestLegends(3);
 
-db.off();

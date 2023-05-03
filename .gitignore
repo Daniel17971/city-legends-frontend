@@ -18,8 +18,7 @@ web-build/
 
 # Enviroment Variables
 
-.env.test
-.env.production
+.env
 
 # JS to ignore
 
