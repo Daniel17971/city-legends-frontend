@@ -25,5 +25,6 @@ web-build/
 
 firebaseConfig.js
 Environments.tsx
+environments.js
 
 

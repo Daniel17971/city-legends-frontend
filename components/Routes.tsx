@@ -1,12 +1,22 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import {
+  Button,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
-import googleApiKey from "../Environments";
+import googleApiKey from "../environments.js";
 
 function Route() {
+  const [newName, setNewName] = useState("");
+  const [isRoutePressed, setIsRoutePressed] = useState(false);
+  const [newRouteObj, setNewRouteObj] = useState({});
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
   const { width, height } = Dimensions.get("window");
@@ -157,45 +167,83 @@ function Route() {
     return deg * (Math.PI / 180);
   }
 
+  const onRoutePress = () => {
+    setIsRoutePressed(true);
+  };
+
+  const onCancelPress = () => {
+    setIsRoutePressed(false);
+  };
+
+  const onMarkerPress = (item) => {
+    if (isRoutePressed) {
+      if (!newRouteObj.hasOwnProperty("origin")) {
+        setNewRouteObj((currentObj) => {
+          return { origin: item.location };
+        });
+      }
+    } else {
+      return;
+    }
+  };
+
   return (
     <View style={styles.container}>
       {isLoading ? (
         <Text>... is loading</Text>
       ) : (
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          initialRegion={initialPosition}
-          onRegionChange={onRegionChange}
-        >
-          {testRouteList.map((route, index) => {
-            return (
-              <MapViewDirections
-                key={index}
-                origin={route.origin}
-                waypoints={route.waypoints}
-                mode="WALKING"
-                destination={route.destination}
-                apikey={googleApiKey}
-                strokeWidth={3}
-                strokeColor="blue"
+        <View>
+          {isRoutePressed ? (
+            <View>
+              <Button title={"Submit"} />
+              <TextInput
+                value={newName}
+                onChangeText={setNewName}
+                placeholder="Route name"
               />
-            );
-          })}
 
-          {filteredLocations
-            ? filteredLocations.map((item, index) => {
-                return (
-                  <Marker
-                    key={index}
-                    coordinate={item.location}
-                    title={item.title}
-                    description={item.description}
-                  />
-                );
-              })
-            : null}
-        </MapView>
+              <Button title={"Cancel"} onPress={onCancelPress} />
+            </View>
+          ) : (
+            <Button title={"Create route"} onPress={onRoutePress} />
+          )}
+
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            initialRegion={initialPosition}
+            onRegionChange={onRegionChange}
+          >
+            {testRouteList.map((route, index) => {
+              return (
+                <MapViewDirections
+                  key={index}
+                  origin={route.origin}
+                  waypoints={route.waypoints}
+                  mode="WALKING"
+                  destination={route.destination}
+                  apikey={googleApiKey}
+                  strokeWidth={3}
+                  strokeColor="blue"
+                />
+              );
+            })}
+
+            {filteredLocations
+              ? filteredLocations.map((item, index) => {
+                  return (
+                    <Marker
+                      key={index}
+                      coordinate={item.location}
+                      title={item.title}
+                      description={item.description}
+                      onPress={onMarkerPress}
+                    />
+                  );
+                })
+              : null}
+          </MapView>
+        </View>
       )}
     </View>
   );
