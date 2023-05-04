@@ -1,10 +1,11 @@
 import { initializeApp }from "firebase/app";
-import { getAuth } from "firebase/auth";
+
+import {API_KEY, DATABASE_URL} from "./firebase-keys";
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  apiKey: API_KEY,
   authDomain: "city-legends-19cb4.firebaseapp.com",
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  databaseURL: DATABASE_URL,
   projectId: "city-legends-19cb4",
   storageBucket: "city-legends-19cb4.appspot.com",
   messagingSenderId: "1021424180412",
@@ -12,4 +13,3 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
