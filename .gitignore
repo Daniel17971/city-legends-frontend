@@ -22,6 +22,7 @@ web-build/
 
 # JS to ignore
 
+env*
 firebase-keys.ts
 firebaseConfig.js
 
