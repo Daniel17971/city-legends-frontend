@@ -14,7 +14,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Login" component={Login} options={{headerShown: false}}/>
+        <Tab.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false, tabBarStyle: { display: "none" } }}
+        />
         <Tab.Screen name="Home" component={Home} options={{ title: "Home" }} />
         <Tab.Screen name="Map" component={Map} options={{ title: "Map" }} />
       </Tab.Navigator>

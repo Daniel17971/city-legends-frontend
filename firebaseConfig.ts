@@ -1,9 +1,9 @@
-import { initializeApp }from "firebase/app";
+import { initializeApp } from "firebase/app";
 
-import {API_KEY, DATABASE_URL} from "./firebase-keys";
+import { FIREBASE_API_KEY, DATABASE_URL } from "./env";
 
 const firebaseConfig = {
-  apiKey: API_KEY,
+  apiKey: FIREBASE_API_KEY,
   authDomain: "city-legends-19cb4.firebaseapp.com",
   databaseURL: DATABASE_URL,
   projectId: "city-legends-19cb4",

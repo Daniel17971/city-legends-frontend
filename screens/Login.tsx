@@ -8,9 +8,15 @@ import {
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { app } from "../firebaseConfig";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,15 +26,15 @@ const Login = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      if(user){
+      if (user) {
         navigation.navigate("Home" as never, {} as never);
         // navigation.navigate('Home', {
         //   screen: 'Home',
         //   params: {screen: 'Past'},
         // })
       }
-    })
-  },[])
+    });
+  }, []);
 
   const auth = getAuth(app);
 
@@ -48,10 +54,10 @@ const Login = () => {
         console.log(user.email);
       })
       .catch((error) => alert(error.message));
-  }
+  };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
+    <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -80,7 +86,7 @@ const Login = () => {
           <Text style={styles.buttonOutlineText}>Register</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

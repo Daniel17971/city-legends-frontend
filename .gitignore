@@ -25,4 +25,4 @@ web-build/
 firebase-keys.ts
 firebaseConfig.js
 
-
+env.js
