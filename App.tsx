@@ -6,6 +6,7 @@ import React from "react";
 
 import Home from "./components/Home";
 import Map from "./components/Map";
+import Route from "./components/Routes";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,6 +16,11 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name="Home" component={Home} options={{ title: "Home" }} />
         <Tab.Screen name="Map" component={Map} options={{ title: "Map" }} />
+        <Tab.Screen
+          name="Route"
+          component={Route}
+          options={{ title: "Route" }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
