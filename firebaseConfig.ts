@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApp } from "firebase/app";
 
 import { FIREBASE_API_KEY, DATABASE_URL } from "./env";
 
@@ -12,4 +12,12 @@ const firebaseConfig = {
   appId: "1:1021424180412:web:e67b2c1818721c7f5504b9",
 };
 
-export const app = initializeApp(firebaseConfig);
+const createFirebaseApp = (config) => {
+  try {
+    return getApp();
+  } catch (err) {
+    return initializeApp(config);
+  }
+};
+
+export const app = createFirebaseApp(firebaseConfig)
