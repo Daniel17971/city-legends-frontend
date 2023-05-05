@@ -16,6 +16,7 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
+import { getLegends } from "../db/api";
 
 function Map() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -35,6 +36,7 @@ function Map() {
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+
   const listOfLocations = [
     {
       title: "test-1",

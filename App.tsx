@@ -11,6 +11,7 @@ import Login from "./screens/Login";
 import Map from "./screens/Map";
 
 import User from "./screens/User";
+import Geocode from "./screens/Geocode";
 
 const Tab = createBottomTabNavigator();
 
@@ -48,13 +49,13 @@ export default function App() {
             component={Home}
             options={{ title: "Home" }}
           />
-
           <Tab.Screen name="Map" component={Map} options={{ title: "Map" }} />
           <Tab.Screen
             name="User"
             component={User}
             options={{ title: "User" }}
           />
+          <Tab.Screen name="Geo" component={Geocode} />
         </Tab.Navigator>
       </NavigationContainer>
     </UserContextProvider>
