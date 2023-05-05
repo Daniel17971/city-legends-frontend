@@ -1,6 +1,8 @@
 import {
+  Alert,
   Button,
   Dimensions,
+  Modal,
   StyleSheet,
   Text,
   TextInput,
@@ -14,6 +16,9 @@ import MapViewDirections from "react-native-maps-directions";
 import googleApiKey from "../environments.js";
 
 function Route() {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [routeList, setRouteList] = useState([]);
   const [newName, setNewName] = useState("");
   const [isRoutePressed, setIsRoutePressed] = useState(false);
   const [newRouteObj, setNewRouteObj] = useState({});
@@ -24,33 +29,6 @@ function Route() {
   const latitudeDelta = 0.02;
   const longitudeDelta = latitudeDelta * aspectRatio;
   const radius = 6000000;
-  //   const origin = {
-  //     latitude: 53.47469237583231,
-  //     longitude: -2.2411665530428904,
-  //   };
-  //   const waypoints = [
-  //     {
-  //       latitude: 53.477074583793325,
-  //       longitude: -2.2337428647131357,
-  //     },
-  //   ];
-  //   const destination = {
-  //     latitude: 53.48208743879171,
-  //     longitude: -2.2373735774163372,
-  //   };
-  const testRouteList = [
-    {
-      title: "test 1",
-      origin: { latitude: 53.47469237583231, longitude: -2.2411665530428904 },
-      destination: {
-        latitude: 53.48208743879171,
-        longitude: -2.2373735774163372,
-      },
-      waypoints: [
-        { latitude: 53.477074583793325, longitude: -2.2337428647131357 },
-      ],
-    },
-  ];
 
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
@@ -173,6 +151,7 @@ function Route() {
 
   const onCancelPress = () => {
     setIsRoutePressed(false);
+    setNewRouteObj({});
   };
 
   const onMarkerPress = (item) => {
@@ -181,10 +160,45 @@ function Route() {
         setNewRouteObj((currentObj) => {
           return { origin: item.location };
         });
+      } else if (!newRouteObj.hasOwnProperty("waypoints")) {
+        setNewRouteObj((currentObj) => {
+          return { ...currentObj, waypoints: [item.location] };
+        });
+      } else {
+        setNewRouteObj((currentObj) => {
+          currentObj["waypoints"].push(item.location);
+          return { ...currentObj };
+        });
       }
     } else {
       return;
     }
+  };
+
+  const onSubmitPress = () => {
+    if (
+      newRouteObj.hasOwnProperty("origin") &&
+      newRouteObj.hasOwnProperty("waypoints") &&
+      newName.length
+    ) {
+      setHasSubmitted(true);
+      setNewRouteObj((currentObj) => {
+        const destination = currentObj["waypoints"].pop();
+        const name = newName;
+        return { name, ...currentObj, destination };
+      });
+    } else return;
+  };
+
+  const onConfirmPress = () => {
+    if (newRouteObj["destination"]) {
+      setRouteList((routeList) => {
+        return [...routeList, newRouteObj];
+      });
+      setNewRouteObj({});
+      setHasSubmitted(false);
+      setIsRoutePressed(false);
+    } else return;
   };
 
   return (
@@ -195,12 +209,16 @@ function Route() {
         <View>
           {isRoutePressed ? (
             <View>
-              <Button title={"Submit"} />
               <TextInput
                 value={newName}
                 onChangeText={setNewName}
                 placeholder="Route name"
               />
+              {hasSubmitted ? (
+                <Button title={"Confirm"} onPress={onConfirmPress} />
+              ) : (
+                <Button title={"Submit"} onPress={onSubmitPress} />
+              )}
 
               <Button title={"Cancel"} onPress={onCancelPress} />
             </View>
@@ -214,7 +232,7 @@ function Route() {
             initialRegion={initialPosition}
             onRegionChange={onRegionChange}
           >
-            {testRouteList.map((route, index) => {
+            {routeList.map((route, index) => {
               return (
                 <MapViewDirections
                   key={index}
@@ -237,7 +255,9 @@ function Route() {
                       coordinate={item.location}
                       title={item.title}
                       description={item.description}
-                      onPress={onMarkerPress}
+                      onPress={(event) => {
+                        return onMarkerPress(item);
+                      }}
                     />
                   );
                 })
