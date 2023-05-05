@@ -18,9 +18,13 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
+import {UserContext} from "../contexts/user"
+import { useContext } from "react";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const {setUserEmail, setUid} = useContext(UserContext);
 
   const navigation = useNavigation();
 
@@ -28,10 +32,6 @@ const Login = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         navigation.navigate("Home" as never, {} as never);
-        // navigation.navigate('Home', {
-        //   screen: 'Home',
-        //   params: {screen: 'Past'},
-        // })
       }
     });
   }, []);
@@ -41,8 +41,9 @@ const Login = () => {
   const handleSingUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user.email);
+        const {email, uid} = userCredential.user;
+        setUserEmail(email)
+        setUid(uid)
       })
       .catch((err) => alert(err.message));
   };
@@ -50,8 +51,9 @@ const Login = () => {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user.email);
+        const {email, uid} = userCredential.user;
+        setUserEmail(email)
+        setUid(uid)
       })
       .catch((error) => alert(error.message));
   };
