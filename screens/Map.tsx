@@ -16,6 +16,7 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
+import LegendMarker from "../components/LegendMarker";
 
 function Map() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -255,27 +256,12 @@ function Map() {
             {filteredLocations
               ? filteredLocations.map((item, index) => {
                   return (
-                    <Marker
-                      onPress={(event) => {
-                        onMarkerPress(item);
-                      }}
+                    <LegendMarker
                       key={index}
-                      coordinate={item.location}
-                      style={{ height: 100, width: 100 }}
-                    >
-                      <Image
-                        source={require("../assets/image1.png")}
-                        style={{ height: 35, width: 35 }}
-                      />
-                      <Callout>
-                        <Text>{item.title}</Text>
-                        <Image
-                          source={require("../assets/image1.png")}
-                          style={{ height: 35, width: 35 }}
-                        />
-                        <Text>{item.description}</Text>
-                      </Callout>
-                    </Marker>
+                      item={item}
+                      index={index}
+                      onMarkerPress={onMarkerPress}
+                    />
                   );
                 })
               : null}
