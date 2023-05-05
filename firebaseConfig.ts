@@ -1,6 +1,6 @@
 import { initializeApp, getApp } from "firebase/app";
 
-import { FIREBASE_API_KEY, DATABASE_URL } from "./env";
+import { FIREBASE_API_KEY, DATABASE_URL } from "./environments";
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -20,4 +20,4 @@ const createFirebaseApp = (config) => {
   }
 };
 
-export const app = createFirebaseApp(firebaseConfig)
+export const app = createFirebaseApp(firebaseConfig);
