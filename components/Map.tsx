@@ -1,22 +1,40 @@
-import { Dimensions, StyleSheet, Text, View, Image } from "react-native";
+import {
+  Alert,
+  Button,
+  Dimensions,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Image,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
-import mapStyle from "../assets/mapStyle";
+import MapViewDirections from "react-native-maps-directions";
+import googleApiKey from "../environments.js";
+import mapStyle from "../assets/mapStyle.js";
+
 function Map() {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  const [routeList, setRouteList] = useState([]);
+  const [newName, setNewName] = useState("");
+  const [isRoutePressed, setIsRoutePressed] = useState(false);
+  const [newRouteObj, setNewRouteObj] = useState({});
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
   const latitudeDelta = 0.02;
   const longitudeDelta = latitudeDelta * aspectRatio;
-  const radius = 600;
+  const radius = 6000000;
 
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const listOfLocations = [
     {
       title: "test-1",
@@ -39,6 +57,30 @@ function Map() {
       location: {
         latitude: 55.123213,
         longitude: 3.123212,
+      },
+      description: "this is about the test-1 location",
+    },
+    {
+      title: "test-4",
+      location: {
+        latitude: 53.47469237583231,
+        longitude: -2.2411665530428904,
+      },
+      description: "this is about the test-1 location",
+    },
+    {
+      title: "test-5",
+      location: {
+        latitude: 53.477074583793325,
+        longitude: -2.2337428647131357,
+      },
+      description: "this is about the test-1 location",
+    },
+    {
+      title: "test-6",
+      location: {
+        latitude: 53.48208743879171,
+        longitude: -2.2373735774163372,
       },
       description: "this is about the test-1 location",
     },
@@ -105,44 +147,140 @@ function Map() {
     return deg * (Math.PI / 180);
   }
 
+  const onRoutePress = () => {
+    setIsRoutePressed(true);
+  };
+
+  const onCancelPress = () => {
+    setIsRoutePressed(false);
+    setNewRouteObj({});
+  };
+
+  const onMarkerPress = (item) => {
+    if (isRoutePressed) {
+      if (!newRouteObj.hasOwnProperty("origin")) {
+        setNewRouteObj((currentObj) => {
+          return { origin: item.location };
+        });
+      } else if (!newRouteObj.hasOwnProperty("waypoints")) {
+        setNewRouteObj((currentObj) => {
+          return { ...currentObj, waypoints: [item.location] };
+        });
+      } else {
+        setNewRouteObj((currentObj) => {
+          currentObj["waypoints"].push(item.location);
+          return { ...currentObj };
+        });
+      }
+    } else {
+      return;
+    }
+  };
+
+  const onSubmitPress = () => {
+    if (
+      newRouteObj.hasOwnProperty("origin") &&
+      newRouteObj.hasOwnProperty("waypoints") &&
+      newName.length
+    ) {
+      setHasSubmitted(true);
+      setNewRouteObj((currentObj) => {
+        const destination = currentObj["waypoints"].pop();
+        const name = newName;
+        return { name, ...currentObj, destination };
+      });
+    } else return;
+  };
+
+  const onConfirmPress = () => {
+    if (newRouteObj["destination"]) {
+      setRouteList((routeList) => {
+        return [...routeList, newRouteObj];
+      });
+      setNewRouteObj({});
+
+      setHasSubmitted(false);
+      setIsRoutePressed(false);
+    } else return;
+  };
+
   return (
     <View style={styles.container}>
       {isLoading ? (
         <Text>... is loading</Text>
       ) : (
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          initialRegion={initialPosition}
-          onRegionChange={onRegionChange}
-          showsUserLocation={true}
-          customMapStyle={mapStyle}
-        >
-          {filteredLocations
-            ? filteredLocations.map((item, index) => {
-                return (
-                  <Marker
-                    key={index}
-                    coordinate={item.location}
-                    style={{ height: 100, width: 100 }}
-                  >
-                    <Image
-                      source={require("../assets/image1.png")}
-                      style={{ height: 35, width: 35 }}
-                    />
-                    <Callout>
-                      <Text>{item.title}</Text>
+        <View>
+          {isRoutePressed ? (
+            <View>
+              <TextInput
+                value={newName}
+                onChangeText={setNewName}
+                placeholder="Route name"
+              />
+              {hasSubmitted ? (
+                <Button title={"Confirm"} onPress={onConfirmPress} />
+              ) : (
+                <Button title={"Submit"} onPress={onSubmitPress} />
+              )}
+
+              <Button title={"Cancel"} onPress={onCancelPress} />
+            </View>
+          ) : (
+            <Button title={"Create route"} onPress={onRoutePress} />
+          )}
+
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            initialRegion={initialPosition}
+            onRegionChange={onRegionChange}
+            customMapStyle={mapStyle}
+            showsUserLocation={true}
+          >
+            {routeList.map((route, index) => {
+              return (
+                <MapViewDirections
+                  key={index}
+                  origin={route.origin}
+                  waypoints={route.waypoints}
+                  mode="WALKING"
+                  destination={route.destination}
+                  apikey={googleApiKey}
+                  strokeWidth={3}
+                  strokeColor="blue"
+                />
+              );
+            })}
+
+            {filteredLocations
+              ? filteredLocations.map((item, index) => {
+                  return (
+                    <Marker
+                      onPress={(event) => {
+                        onMarkerPress(item);
+                      }}
+                      key={index}
+                      coordinate={item.location}
+                      style={{ height: 100, width: 100 }}
+                    >
                       <Image
                         source={require("../assets/image1.png")}
                         style={{ height: 35, width: 35 }}
                       />
-                      <Text>{item.description}</Text>
-                    </Callout>
-                  </Marker>
-                );
-              })
-            : null}
-        </MapView>
+                      <Callout>
+                        <Text>{item.title}</Text>
+                        <Image
+                          source={require("../assets/image1.png")}
+                          style={{ height: 35, width: 35 }}
+                        />
+                        <Text>{item.description}</Text>
+                      </Callout>
+                    </Marker>
+                  );
+                })
+              : null}
+          </MapView>
+        </View>
       )}
     </View>
   );
@@ -157,5 +295,8 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  highlightedContainer: {
+    color: "blue",
   },
 });
