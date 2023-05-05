@@ -4,7 +4,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Home from "./components/Home";
+import { UserContextProvider } from "./contexts/user";
+
+import Home from "./screens/Home";
+import Login from "./screens/Login";
 import Map from "./components/Map";
 import User from "./components/User";
 
@@ -12,8 +15,9 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
+    <UserContextProvider>
+      <NavigationContainer>
+        <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -33,11 +37,21 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Home" component={Home} options={{ title: "Home" }} />
-        <Tab.Screen name="Map" component={Map} options={{ title: "Map" }} />
-        <Tab.Screen name="User" component={User} options={{ title: "User" }} />
+          <Tab.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false, tabBarStyle: { display: "none" } }}
+          />
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{ title: "Home" }}
+          />
+          <Tab.Screen name="Map" component={Map} options={{ title: "Map" }} />
+          <Tab.Screen name="User" component={User} options={{ title: "User" }} />
       </Tab.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </UserContextProvider>
   );
 }
 
