@@ -17,7 +17,7 @@ import googleApiKey from "../environments.js";
 
 function Route() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
+
   const [routeList, setRouteList] = useState([]);
   const [newName, setNewName] = useState("");
   const [isRoutePressed, setIsRoutePressed] = useState(false);
@@ -196,6 +196,7 @@ function Route() {
         return [...routeList, newRouteObj];
       });
       setNewRouteObj({});
+
       setHasSubmitted(false);
       setIsRoutePressed(false);
     } else return;
@@ -251,6 +252,7 @@ function Route() {
               ? filteredLocations.map((item, index) => {
                   return (
                     <Marker
+                      pinColor="red"
                       key={index}
                       coordinate={item.location}
                       title={item.title}
@@ -278,5 +280,8 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  highlightedContainer: {
+    color: "blue",
   },
 });
