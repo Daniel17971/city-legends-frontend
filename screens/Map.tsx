@@ -20,7 +20,7 @@ import { getLegends } from "../db/api";
 
 function Map() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-
+  const [displayAddress, setDisplayAddress] = useState(null);
   const [routeList, setRouteList] = useState([]);
   const [newName, setNewName] = useState("");
   const [isRoutePressed, setIsRoutePressed] = useState(false);
@@ -178,7 +178,12 @@ function Map() {
       return;
     }
   };
-
+  const getLocation = (event) => {
+    Location.reverseGeocodeAsync(event.nativeEvent.coordinate).then((data) => {
+      setDisplayAddress(data);
+    });
+  };
+  console.log(displayAddress);
   const onSubmitPress = () => {
     if (
       newRouteObj.hasOwnProperty("origin") &&
@@ -238,6 +243,9 @@ function Map() {
             onRegionChange={onRegionChange}
             customMapStyle={mapStyle}
             showsUserLocation={true}
+            onPress={(event) => {
+              getLocation(event);
+            }}
           >
             {routeList.map((route, index) => {
               return (
