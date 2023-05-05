@@ -1,10 +1,10 @@
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getDatabase, ref, child, get, set, push } from "firebase/database";
 import { app } from "../firebaseConfig";
 
-const dbRef = ref(getDatabase(app));
+const db = getDatabase(app);
 
 export const getLegends = () => {
-  return get(child(dbRef, `/legends`))
+  return get(child(ref(db), `/legends`))
     .then((snapshot) => {
       if (snapshot.exists()) {
         return snapshot.val();
@@ -15,4 +15,10 @@ export const getLegends = () => {
     .catch((error) => {
       console.error(error);
     });
+};
+
+export const postLegend = (legend: object) => {
+  return push(ref(db, "legends/"), legend).then((response) => {
+    console.log(response);
+  }).catch(error => alert(error))
 };
