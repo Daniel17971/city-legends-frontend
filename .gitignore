@@ -26,7 +26,6 @@ web-build/
 env*
 firebase-keys.ts
 firebaseConfig.js
-Environments.tsx
 environments.js
 
 env.js

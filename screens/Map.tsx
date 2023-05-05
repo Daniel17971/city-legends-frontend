@@ -16,6 +16,7 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
+import { styled } from "nativewind";
 
 function Map() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
