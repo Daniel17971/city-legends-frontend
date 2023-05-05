@@ -14,7 +14,7 @@ import MapView, { Marker, Callout } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
-import { googleApiKey } from "../environments.js";
+import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
 
 function Map() {
