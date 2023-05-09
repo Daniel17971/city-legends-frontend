@@ -35,10 +35,10 @@ function Map({ navigation }) {
   const [selectedLegend, setSelectedLegend] = useState(null);
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
-  const latitudeDelta = 0.02;
-  const longitudeDelta = latitudeDelta * aspectRatio;
-  const [radius, setRadius] = useState(1);
 
+  const [radius, setRadius] = useState(1);
+  const latitudeDelta = 0.2 * (radius / 6.5);
+  const longitudeDelta = latitudeDelta * aspectRatio;
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -98,9 +98,6 @@ function Map({ navigation }) {
             );
           });
         });
-      })
-      .then(() => {
-        console.log(filteredLocations);
       });
   }, [setLocation, setInitialPosition, setFilteredLocations, slidingDone]);
 
@@ -252,7 +249,8 @@ function Map({ navigation }) {
             <Slider
               style={{ width: 200, height: 40 }}
               minimumValue={0}
-              maximumValue={1000 * 1000}
+              maximumValue={100}
+              value={radius}
               minimumTrackTintColor="#FFFFFF"
               maximumTrackTintColor="#000000"
               onValueChange={(event) => {
@@ -277,6 +275,7 @@ function Map({ navigation }) {
                 }}
                 radius={radius * 1000}
                 strokeColor="red"
+                fillColor="red"
                 strokeWidth={5}
               />
             ) : null}
