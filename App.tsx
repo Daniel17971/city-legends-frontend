@@ -11,6 +11,7 @@ import Login from "./screens/Login";
 import Map from "./screens/Map";
 
 import User from "./screens/User";
+import LegendForm from "./screens/LegendForm";
 import MyStack from "./screens/Stack";
 
 const Tab = createBottomTabNavigator();
@@ -50,6 +51,7 @@ export default function App() {
             options={{ title: "Home" }}
           />
 
+          <Tab.Screen name="LegendForm" component={LegendForm} options={{title: "Create Legend"}}/>
           <Tab.Screen
             name="Map"
             component={MyStack}

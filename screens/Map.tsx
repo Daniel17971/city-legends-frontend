@@ -61,7 +61,6 @@ function Map({ navigation }) {
       })
       .then((data) => {
         setIsLoading(false);
-
         setInitialPosition((currentPostition) => {
           return {
             latitudeDelta,
@@ -117,6 +116,11 @@ function Map({ navigation }) {
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
+
+  const onUserPress = (event) => {
+    console.log(event.nativeEvent.coordinate);
+    setUserSelectedLocation(event.nativeEvent.coordinate);
+  };
 
   const onRoutePress = () => {
     setIsRoutePressed(true);

@@ -27,6 +27,7 @@ const Login = () => {
   const {setUserEmail, setUid} = useContext(UserContext);
 
   const navigation = useNavigation();
+  const auth = getAuth(app);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -35,8 +36,6 @@ const Login = () => {
       }
     });
   }, []);
-
-  const auth = getAuth(app);
 
   const handleSingUp = () => {
     createUserWithEmailAndPassword(auth, email, password)

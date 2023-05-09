@@ -4,12 +4,10 @@ var database_1 = require("firebase/database");
 var faker_1 = require("@faker-js/faker");
 var firebaseConfig_1 = require("../firebaseConfig");
 var db = (0, database_1.getDatabase)(firebaseConfig_1.app);
-function writeLegendData(legendId, legendObj) {
-    var db = (0, database_1.getDatabase)(firebaseConfig_1.app);
-    (0, database_1.set)((0, database_1.ref)(db, "legends/" + legendId), legendObj);
+function writeLegendData(legend) {
+    (0, database_1.push)((0, database_1.ref)(db, "legends/"), legend);
 }
 function writeUserData(userId, userObj) {
-    var db = (0, database_1.getDatabase)(firebaseConfig_1.app);
     (0, database_1.set)((0, database_1.ref)(db, "users/" + userId), userObj);
 }
 var usersIdArr = [];
@@ -28,20 +26,19 @@ function generateTestUsers(numOfUsers) {
 }
 function generateTestLegends(numOfLegends) {
     for (var i = 0; i < numOfLegends; i++) {
-        var legendId = faker_1.faker.datatype.uuid();
-        var coordinates = faker_1.faker.address.nearbyGPSCoordinate([53.992119, -1.541812], 1);
+        // const legendId = faker.datatype.uuid();
+        var coordinates = faker_1.faker.address.nearbyGPSCoordinate([52.4128, 1.5090], 1);
         var legend = {
             title: faker_1.faker.lorem.words(Math.floor(Math.random() * 6 + 10)),
             body: faker_1.faker.lorem.words(Math.floor(Math.random() * 170 + 31)),
-            author: usersIdArr[Math.floor(Math.random() * usersIdArr.length)],
             location: {
-                lat: coordinates[0],
-                long: coordinates[1]
+                latitude: coordinates[0],
+                longitude: coordinates[1]
             }
         };
-        writeLegendData(legendId, legend);
+        writeLegendData(legend);
     }
 }
 // Seed test DB
-generateTestUsers(3);
+// generateTestUsers(3);
 generateTestLegends(3);
