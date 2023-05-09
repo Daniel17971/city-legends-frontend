@@ -237,7 +237,7 @@ function Map({ navigation }) {
                 })
               : null}
             <Button
-              title={"legend" + selectedLegend.title}
+              title={selectedLegend ? "legend" + selectedLegend.title : ""}
               onPress={() => {
                 navigation.navigate("LegendPage", {
                   id: selectedLegend.title,
