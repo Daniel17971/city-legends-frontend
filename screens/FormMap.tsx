@@ -21,17 +21,10 @@ import { getLegends } from "../db/api";
 
 import LegendMarker from "./LegendMarker";
 
-function Map({ navigation }) {
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-
+function FormMap({ setUserSelectedLocation }) {
   const [routeList, setRouteList] = useState([]);
-
-  const [newName, setNewName] = useState("");
-  const [isRoutePressed, setIsRoutePressed] = useState(false);
-  const [newRouteObj, setNewRouteObj] = useState({});
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
-  const [selectedLegend, setSelectedLegend] = useState(null);
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
   const latitudeDelta = 0.02;
@@ -117,62 +110,9 @@ function Map({ navigation }) {
     return deg * (Math.PI / 180);
   }
 
-  const onRoutePress = () => {
-    setIsRoutePressed(true);
-  };
-
-  const onCancelPress = () => {
-    setIsRoutePressed(false);
-    setNewRouteObj({});
-  };
-
-  const onMarkerPress = (item) => {
-    setSelectedLegend(item);
-    if (isRoutePressed) {
-      if (!newRouteObj.hasOwnProperty("origin")) {
-        setNewRouteObj((currentObj) => {
-          return { origin: item.location };
-        });
-      } else if (!newRouteObj.hasOwnProperty("waypoints")) {
-        setNewRouteObj((currentObj) => {
-          return { ...currentObj, waypoints: [item.location] };
-        });
-      } else {
-        setNewRouteObj((currentObj) => {
-          currentObj["waypoints"].push(item.location);
-          return { ...currentObj };
-        });
-      }
-    } else {
-      return;
-    }
-  };
-
-  const onSubmitPress = () => {
-    if (
-      newRouteObj.hasOwnProperty("origin") &&
-      newRouteObj.hasOwnProperty("waypoints") &&
-      newName.length
-    ) {
-      setHasSubmitted(true);
-      setNewRouteObj((currentObj) => {
-        const destination = currentObj["waypoints"].pop();
-        const name = newName;
-        return { name, ...currentObj, destination };
-      });
-    } else return;
-  };
-
-  const onConfirmPress = () => {
-    if (newRouteObj["destination"]) {
-      setRouteList((routeList) => {
-        return [...routeList, newRouteObj];
-      });
-      setNewRouteObj({});
-
-      setHasSubmitted(false);
-      setIsRoutePressed(false);
-    } else return;
+  const onUserPress = (event) => {
+    console.log(event.nativeEvent.coordinate);
+    setUserSelectedLocation(event.nativeEvent.coordinate);
   };
 
   return (
@@ -181,25 +121,6 @@ function Map({ navigation }) {
         <Text>... is loading</Text>
       ) : (
         <View>
-          {isRoutePressed ? (
-            <View>
-              <TextInput
-                value={newName}
-                onChangeText={setNewName}
-                placeholder="Route name"
-              />
-              {hasSubmitted ? (
-                <Button title={"Confirm"} onPress={onConfirmPress} />
-              ) : (
-                <Button title={"Submit"} onPress={onSubmitPress} />
-              )}
-
-              <Button title={"Cancel"} onPress={onCancelPress} />
-            </View>
-          ) : (
-            <Button title={"Create route"} onPress={onRoutePress} />
-          )}
-
           <MapView
             provider={PROVIDER_GOOGLE}
             style={styles.map}
@@ -207,6 +128,7 @@ function Map({ navigation }) {
             onRegionChange={onRegionChange}
             customMapStyle={mapStyle}
             showsUserLocation={true}
+            onPress={onUserPress}
           >
             {routeList.map((route, index) => {
               return (
@@ -230,19 +152,11 @@ function Map({ navigation }) {
                       item={item}
                       index={index}
                       key={index}
-                      onMarkerPress={onMarkerPress}
+                      onMarkerPress={null}
                     />
                   );
                 })
               : null}
-            <Button
-              title={selectedLegend ? "legend" + selectedLegend.title : ""}
-              onPress={() => {
-                navigation.navigate("LegendPage", {
-                  legend: selectedLegend,
-                });
-              }}
-            />
           </MapView>
         </View>
       )}
@@ -250,7 +164,7 @@ function Map({ navigation }) {
   );
 }
 
-export default Map;
+export default FormMap;
 
 const styles = StyleSheet.create({
   container: {

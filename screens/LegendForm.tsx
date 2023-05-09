@@ -14,8 +14,9 @@ import { UserContext } from "../contexts/user";
 import { postLegend } from "../db/api";
 import { useNavigation } from "@react-navigation/native";
 import Success from "../components/Success";
+import FormMap from "./FormMap";
 
-const LegendForm = () => {
+const LegendForm = ({ navigation }) => {
   const { uid } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [legendCategory, setLegendCategory] = useState(null);
@@ -29,7 +30,6 @@ const LegendForm = () => {
   ]);
   const [userSelectedLocation, setUserSelectedLocation] = useState(null);
   const [submited, setSubmited] = useState(false);
-
   const handleSubmit = () => {
     if (!description.trim() || !title.trim() || !userSelectedLocation) {
       alert("Please fill in required fields.");
@@ -71,12 +71,7 @@ const LegendForm = () => {
               onChangeText={(text) => setDescription(text)}
             />
             <Text>Choose your Legend Location</Text>
-            <View style={styles.mapContainer}>
-              <Map
-                setUserSelectedLocation={setUserSelectedLocation}
-                userSelectedLocation={userSelectedLocation}
-              />
-            </View>
+
             <Text>Choose your Legend Category</Text>
             <DropDownPicker
               dropDownContainerStyle={{
@@ -90,6 +85,9 @@ const LegendForm = () => {
               setItems={setItems}
               bottomOffset={100}
             />
+            <View style={styles.mapContainer}>
+              <FormMap setUserSelectedLocation={setUserSelectedLocation} />
+            </View>
           </View>
 
           <TouchableOpacity style={styles.button} onPress={handleSubmit}>

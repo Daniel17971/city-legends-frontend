@@ -51,7 +51,11 @@ export default function App() {
             options={{ title: "Home" }}
           />
 
-          <Tab.Screen name="LegendForm" component={LegendForm} options={{title: "Create Legend"}}/>
+          <Tab.Screen
+            name="LegendForm"
+            component={LegendForm}
+            options={{ title: "Create Legend" }}
+          />
           <Tab.Screen
             name="Map"
             component={MyStack}
