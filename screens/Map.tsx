@@ -4,7 +4,7 @@ import MapView, { Callout, Marker } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 
-function Map() {
+function Map({ setUserSelectedLocation }) {
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
   const { width, height } = Dimensions.get("window");
@@ -349,7 +349,9 @@ function Map() {
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
-
+  const onUserPress = (event) => {
+    setUserSelectedLocation(event.nativeEvent.coordinate);
+  };
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -362,6 +364,7 @@ function Map() {
           onRegionChange={onRegionChange}
           showsUserLocation={true}
           customMapStyle={mapStyle}
+          onPress={onUserPress}
         >
           {filteredLocations
             ? filteredLocations.map((item, index) => {
