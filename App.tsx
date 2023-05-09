@@ -11,6 +11,7 @@ import Login from "./screens/Login";
 import Map from "./screens/Map";
 
 import User from "./screens/User";
+import MyStack from "./screens/Stack";
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +50,11 @@ export default function App() {
             options={{ title: "Home" }}
           />
 
-          <Tab.Screen name="Map" component={Map} options={{ title: "Map" }} />
+          <Tab.Screen
+            name="Map"
+            component={MyStack}
+            options={{ title: "Map" }}
+          />
           <Tab.Screen
             name="User"
             component={User}
