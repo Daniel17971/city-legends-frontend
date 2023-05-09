@@ -1,296 +1,50 @@
-import { Dimensions, StyleSheet, Text, View, Image } from "react-native";
+import {
+  Alert,
+  Button,
+  Dimensions,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Image,
+  TouchableHighlight,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
+import MapViewDirections from "react-native-maps-directions";
+import { googleApiKey } from "../env";
+import mapStyle from "../assets/mapStyle.js";
+import { getLegends } from "../db/api";
 
-function Map({ setUserSelectedLocation, userSelectedLocation }) {
+import LegendMarker from "./LegendMarker";
+
+function Map({ navigation }) {
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  const [routeList, setRouteList] = useState([]);
+
+  const [newName, setNewName] = useState("");
+  const [isRoutePressed, setIsRoutePressed] = useState(false);
+  const [newRouteObj, setNewRouteObj] = useState({});
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
+  const [selectedLegend, setSelectedLegend] = useState(null);
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
   const latitudeDelta = 0.02;
   const longitudeDelta = latitudeDelta * aspectRatio;
-  const radius = 600;
+  const radius = 6000000;
 
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const mapStyle = [
-    {
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#ebe3cd",
-        },
-      ],
-    },
-    {
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#523735",
-        },
-      ],
-    },
-    {
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          color: "#f5f1e6",
-        },
-      ],
-    },
-    {
-      featureType: "administrative",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#c9b2a6",
-        },
-      ],
-    },
-    {
-      featureType: "administrative.land_parcel",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#dcd2be",
-        },
-      ],
-    },
-    {
-      featureType: "administrative.land_parcel",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#ae9e90",
-        },
-      ],
-    },
-    {
-      featureType: "landscape.natural",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#dfd2ae",
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#dfd2ae",
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "labels",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "labels.text",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#93817c",
-        },
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "poi.park",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#a5b076",
-        },
-      ],
-    },
-    {
-      featureType: "poi.park",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#447530",
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#f5f1e6",
-        },
-      ],
-    },
-    {
-      featureType: "road.arterial",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#fdfcf8",
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#f8c967",
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#e9bc62",
-        },
-      ],
-    },
-    {
-      featureType: "road.highway.controlled_access",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#e98d58",
-        },
-      ],
-    },
-    {
-      featureType: "road.highway.controlled_access",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#db8555",
-        },
-      ],
-    },
-    {
-      featureType: "road.local",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#806b63",
-        },
-      ],
-    },
-    {
-      featureType: "transit.line",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#dfd2ae",
-        },
-      ],
-    },
-    {
-      featureType: "transit.line",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#8f7d77",
-        },
-      ],
-    },
-    {
-      featureType: "transit.line",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          color: "#ebe3cd",
-        },
-      ],
-    },
-    {
-      featureType: "transit.station",
-      elementType: "geometry",
-      stylers: [
-        {
-          color: "#dfd2ae",
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#b9d3c2",
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#92998d",
-        },
-      ],
-    },
-  ];
-
-  const listOfLocations = [
-    {
-      title: "test-1",
-      location: {
-        latitude: 55,
-        longitude: 3,
-      },
-      description: "this is about the test-1 location",
-    },
-    {
-      title: "test-2",
-      location: {
-        latitude: 45.761499546355104,
-        longitude: 4.8555995726222445,
-      },
-      description: "this is about the test-1 location",
-    },
-    {
-      title: "test-3",
-      location: {
-        latitude: 55.123213,
-        longitude: 3.123212,
-      },
-      description: "this is about the test-1 location",
-    },
-  ];
 
   useEffect(() => {
     setIsLoading(true);
+
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
         if (status !== "granted") {
@@ -307,20 +61,7 @@ function Map({ setUserSelectedLocation, userSelectedLocation }) {
       })
       .then((data) => {
         setIsLoading(false);
-        setFilteredLocations((currentFilteredLocations) => {
-          return listOfLocations.filter((item) => {
-            return (
-              radius >
-              getDistanceFromLatLonInKm(
-                data.coords.latitude,
-                data.coords.longitude,
-                item.location.latitude,
-                item.location.longitude
-              )
-            );
-          });
-        });
-        return setInitialPosition((currentPostition) => {
+        setInitialPosition((currentPostition) => {
           return {
             latitudeDelta,
             longitudeDelta,
@@ -328,8 +69,34 @@ function Map({ setUserSelectedLocation, userSelectedLocation }) {
             longitude: data.coords.longitude,
           };
         });
+        return data;
+      })
+      .then((data) => {
+        return Promise.all([
+          getLegends().then((data) => {
+            return Object.values(data);
+          }),
+          data,
+        ]);
+      })
+      .then((legends) => {
+        setFilteredLocations((currentFilteredLocations) => {
+          return legends[0].filter((item) => {
+            item["location"].latitude = +item["location"].latitude;
+            item["location"].longitude = +item["location"].longitude;
+            return (
+              radius >
+              getDistanceFromLatLonInKm(
+                legends[1].coords.latitude,
+                legends[1].coords.longitude,
+                item["location"].latitude,
+                item["location"].longitude
+              )
+            );
+          });
+        });
       });
-  }, [setLocation, setInitialPosition]);
+  }, [setLocation, setInitialPosition, setFilteredLocations]);
 
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     let R = 6371; // Radius of the earth in km
@@ -349,60 +116,141 @@ function Map({ setUserSelectedLocation, userSelectedLocation }) {
   function deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
+
   const onUserPress = (event) => {
     console.log(event.nativeEvent.coordinate);
     setUserSelectedLocation(event.nativeEvent.coordinate);
   };
+
+  const onRoutePress = () => {
+    setIsRoutePressed(true);
+  };
+
+  const onCancelPress = () => {
+    setIsRoutePressed(false);
+    setNewRouteObj({});
+  };
+
+  const onMarkerPress = (item) => {
+    setSelectedLegend(item);
+    if (isRoutePressed) {
+      if (!newRouteObj.hasOwnProperty("origin")) {
+        setNewRouteObj((currentObj) => {
+          return { origin: item.location };
+        });
+      } else if (!newRouteObj.hasOwnProperty("waypoints")) {
+        setNewRouteObj((currentObj) => {
+          return { ...currentObj, waypoints: [item.location] };
+        });
+      } else {
+        setNewRouteObj((currentObj) => {
+          currentObj["waypoints"].push(item.location);
+          return { ...currentObj };
+        });
+      }
+    } else {
+      return;
+    }
+  };
+
+  const onSubmitPress = () => {
+    if (
+      newRouteObj.hasOwnProperty("origin") &&
+      newRouteObj.hasOwnProperty("waypoints") &&
+      newName.length
+    ) {
+      setHasSubmitted(true);
+      setNewRouteObj((currentObj) => {
+        const destination = currentObj["waypoints"].pop();
+        const name = newName;
+        return { name, ...currentObj, destination };
+      });
+    } else return;
+  };
+
+  const onConfirmPress = () => {
+    if (newRouteObj["destination"]) {
+      setRouteList((routeList) => {
+        return [...routeList, newRouteObj];
+      });
+      setNewRouteObj({});
+
+      setHasSubmitted(false);
+      setIsRoutePressed(false);
+    } else return;
+  };
+
   return (
     <View style={styles.container}>
       {isLoading ? (
         <Text>... is loading</Text>
       ) : (
-        <MapView
-          provider={PROVIDER_GOOGLE}
-          style={styles.map}
-          initialRegion={initialPosition}
-          onRegionChange={onRegionChange}
-          showsUserLocation={true}
-          customMapStyle={mapStyle}
-          onPress={onUserPress}
-        >
-          {filteredLocations
-            ? filteredLocations.map((item, index) => {
-                return (
-                  <Marker
-                    key={index}
-                    coordinate={item.location}
-                    style={{ height: 100, width: 100 }}
-                  >
-                    <Image
-                      source={require("../assets/image1.png")}
-                      style={{ height: 35, width: 35 }}
-                    />
-                    <Callout>
-                      <Text>{item.title}</Text>
-                      <Image
-                        source={require("../assets/image1.png")}
-                        style={{ height: 35, width: 35 }}
-                      />
-                      <Text>{item.description}</Text>
-                    </Callout>
-                  </Marker>
-                );
-              })
-            : null}
-          {userSelectedLocation && (
-            <Marker
-              coordinate={userSelectedLocation}
-              style={{ height: 100, width: 100 }}
-            >
-              <Image
-                source={require("../assets/image1.png")}
-                style={{ height: 35, width: 35 }}
+        <View>
+          {isRoutePressed ? (
+            <View>
+              <TextInput
+                value={newName}
+                onChangeText={setNewName}
+                placeholder="Route name"
               />
-            </Marker>
+              {hasSubmitted ? (
+                <Button title={"Confirm"} onPress={onConfirmPress} />
+              ) : (
+                <Button title={"Submit"} onPress={onSubmitPress} />
+              )}
+
+              <Button title={"Cancel"} onPress={onCancelPress} />
+            </View>
+          ) : (
+            <Button title={"Create route"} onPress={onRoutePress} />
           )}
-        </MapView>
+
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            initialRegion={initialPosition}
+            onRegionChange={onRegionChange}
+            customMapStyle={mapStyle}
+            showsUserLocation={true}
+          >
+            {routeList.map((route, index) => {
+              return (
+                <MapViewDirections
+                  key={index}
+                  origin={route.origin}
+                  waypoints={route.waypoints}
+                  mode="WALKING"
+                  destination={route.destination}
+                  apikey={googleApiKey}
+                  strokeWidth={3}
+                  strokeColor="blue"
+                />
+              );
+            })}
+
+            {filteredLocations
+              ? filteredLocations.map((item, index) => {
+                  return (
+                    <LegendMarker
+                      item={item}
+                      index={index}
+                      key={index}
+                      onMarkerPress={onMarkerPress}
+                    />
+                  );
+                })
+              : null}
+            <Button
+              title={selectedLegend ? "legend" + selectedLegend.title : ""}
+              onPress={() => {
+                navigation.navigate("LegendPage", {
+                  id: selectedLegend.title,
+                  legend: selectedLegend,
+                });
+              }}
+            />
+          </MapView>
+        </View>
       )}
     </View>
   );
@@ -417,5 +265,8 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  highlightedContainer: {
+    color: "blue",
   },
 });
