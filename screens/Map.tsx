@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   Image,
+  TouchableHighlight,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
@@ -16,16 +17,21 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
+import { getLegends } from "../db/api";
+import { get } from "firebase/database";
+import LegendMarker from "./LegendMarker";
 
 function Map() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const [routeList, setRouteList] = useState([]);
+
   const [newName, setNewName] = useState("");
   const [isRoutePressed, setIsRoutePressed] = useState(false);
   const [newRouteObj, setNewRouteObj] = useState({});
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
+
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
   const latitudeDelta = 0.02;
@@ -35,59 +41,10 @@ function Map() {
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const listOfLocations = [
-    {
-      title: "test-1",
-      location: {
-        latitude: 55,
-        longitude: 3,
-      },
-      description: "this is about the test-1 location",
-    },
-    {
-      title: "test-2",
-      location: {
-        latitude: 45.761499546355104,
-        longitude: 4.8555995726222445,
-      },
-      description: "this is about the test-1 location",
-    },
-    {
-      title: "test-3",
-      location: {
-        latitude: 55.123213,
-        longitude: 3.123212,
-      },
-      description: "this is about the test-1 location",
-    },
-    {
-      title: "test-4",
-      location: {
-        latitude: 53.47469237583231,
-        longitude: -2.2411665530428904,
-      },
-      description: "this is about the test-1 location",
-    },
-    {
-      title: "test-5",
-      location: {
-        latitude: 53.477074583793325,
-        longitude: -2.2337428647131357,
-      },
-      description: "this is about the test-1 location",
-    },
-    {
-      title: "test-6",
-      location: {
-        latitude: 53.48208743879171,
-        longitude: -2.2373735774163372,
-      },
-      description: "this is about the test-1 location",
-    },
-  ];
 
   useEffect(() => {
     setIsLoading(true);
+
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
         if (status !== "granted") {
@@ -104,20 +61,8 @@ function Map() {
       })
       .then((data) => {
         setIsLoading(false);
-        setFilteredLocations((currentFilteredLocations) => {
-          return listOfLocations.filter((item) => {
-            return (
-              radius >
-              getDistanceFromLatLonInKm(
-                data.coords.latitude,
-                data.coords.longitude,
-                item.location.latitude,
-                item.location.longitude
-              )
-            );
-          });
-        });
-        return setInitialPosition((currentPostition) => {
+
+        setInitialPosition((currentPostition) => {
           return {
             latitudeDelta,
             longitudeDelta,
@@ -125,8 +70,34 @@ function Map() {
             longitude: data.coords.longitude,
           };
         });
+        return data;
+      })
+      .then((data) => {
+        return Promise.all([
+          getLegends().then((data) => {
+            return Object.values(data);
+          }),
+          data,
+        ]);
+      })
+      .then((legends) => {
+        setFilteredLocations((currentFilteredLocations) => {
+          return legends[0].filter((item) => {
+            item["location"].latitude = +item["location"].latitude;
+            item["location"].longitude = +item["location"].longitude;
+            return (
+              radius >
+              getDistanceFromLatLonInKm(
+                legends[1].coords.latitude,
+                legends[1].coords.longitude,
+                item["location"].latitude,
+                item["location"].longitude
+              )
+            );
+          });
+        });
       });
-  }, [setLocation, setInitialPosition]);
+  }, [setLocation, setInitialPosition, setFilteredLocations]);
 
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     let R = 6371; // Radius of the earth in km
@@ -255,27 +226,12 @@ function Map() {
             {filteredLocations
               ? filteredLocations.map((item, index) => {
                   return (
-                    <Marker
-                      onPress={(event) => {
-                        onMarkerPress(item);
-                      }}
+                    <LegendMarker
+                      item={item}
+                      index={index}
                       key={index}
-                      coordinate={item.location}
-                      style={{ height: 100, width: 100 }}
-                    >
-                      <Image
-                        source={require("../assets/image1.png")}
-                        style={{ height: 35, width: 35 }}
-                      />
-                      <Callout>
-                        <Text>{item.title}</Text>
-                        <Image
-                          source={require("../assets/image1.png")}
-                          style={{ height: 35, width: 35 }}
-                        />
-                        <Text>{item.description}</Text>
-                      </Callout>
-                    </Marker>
+                      onMarkerPress={onMarkerPress}
+                    />
                   );
                 })
               : null}
