@@ -228,7 +228,7 @@ function Map() {
       {isLoading ? (
         <View style={styles.mapLoadingContainer}>
           <Text>Loading map</Text>
-          <ActivityIndicator animating={true} size={"large"}/>
+          <ActivityIndicator animating={true} size={"large"} />
         </View>
       ) : (
         <View>
@@ -241,24 +241,26 @@ function Map() {
                 value={newName}
                 onChangeText={setNewName}
                 placeholder="Route name"
-                // styles={styles.routeNameInput}
+                style={styles.routeNameInput}
               />
               {hasSubmitted ? (
                 <View style={styles.formButtons}>
-                  <Button title={"Confirm"} onPress={onConfirmPress}/>
+                  <View>
+                    <Button title={"Confirm"} onPress={onConfirmPress} />
+                  </View>
                 </View>
               ) : (
                 <>
                   <View style={styles.formButtons}>
-                    <View style={styles.formButtons}>
+                    <View>
                       <Button title={"Submit"} onPress={onSubmitPress} />
                     </View>
                   </View>
                 </>
               )}
               <>
-                <View>
-                  <View style={styles.formButtons}>
+                <View style={styles.formButtons}>
+                  <View >
                     <Button title={"Cancel"} onPress={onCancelPress} />
                   </View>
                 </View>

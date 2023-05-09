@@ -6,11 +6,11 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   mapLoadingContainer: {
-    top:0,
-    right:0,
-    left:0,
+    top: 0,
+    right: 0,
+    left: 0,
     bottom: 0,
-    position:"absolute",
+    position: "absolute",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -18,39 +18,31 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  highlightedContainer: {
-    color: "blue",
-  },
   postRouteForm: {
     display: "flex",
     flexWrap: "wrap",
     flexDirection: "row",
     alignContent: "center",
-    width: "50%",
+    width: "100%",
     marginVertical: 0,
   },
   routeNameInput: {
+    width: "50%",
     backgroundColor: "white",
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
     borderRadius: 10,
     marginTop: 5,
+    marginBottom: 5
   },
 
   formButtons: {
+    display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
     justifyContent: "space-evenly",
-    borderRadius: 20,
+    alignContent: "center",
+    borderRadius: 0,
     padding: 5,
-  },
-
-  submitbtn: {
-    width: "50%",
-    padding: 5,
-    borderRadius: 50,
-  },
-  cancelbtn: {
-    width: "50%",
-    padding: 5,
-    borderRadius: 50,
-  },
+  }
 });
