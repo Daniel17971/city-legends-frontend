@@ -1,7 +1,4 @@
-import { useEffect, useState, useContext } from "react";
-import MapView from "react-native-maps";
-import { PROVIDER_GOOGLE } from "react-native-maps";
-import * as Location from "expo-location";
+import { useState, useContext } from "react";
 import Map from "./Map";
 
 import {
@@ -15,6 +12,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { UserContext } from "../contexts/user";
 import { postLegend } from "../db/api";
+import { useNavigation } from "@react-navigation/native";
+import Success from "../components/Success";
 
 const LegendForm = () => {
   const { uid } = useContext(UserContext);
@@ -29,10 +28,15 @@ const LegendForm = () => {
     { label: "Further Back History", value: "further_back_history" },
   ]);
   const [userSelectedLocation, setUserSelectedLocation] = useState(null);
+  const [submited, setSubmited] = useState(false);
+
   const handleSubmit = () => {
-    if (!description.trim() || !title.trim()) {
+    if (!description.trim() || !title.trim() || !userSelectedLocation) {
       alert("Please fill in required fields.");
     } else {
+      setDescription("");
+      setTitle("");
+      setLegendCategory(null);
       postLegend({
         title,
         description,
@@ -40,49 +44,59 @@ const LegendForm = () => {
         author: uid,
         location: userSelectedLocation,
       });
+      setSubmited(true);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Create a new Legend</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Title"
-          style={styles.input}
-          value={title}
-          onChangeText={(text) => setTitle(text)}
-        />
-        <TextInput
-          placeholder="Description"
-          multiline
-          numberOfLines={8}
-          style={styles.input}
-          value={description}
-          onChangeText={(text) => setDescription(text)}
-        />
-        <Text>Choose your Legend Location</Text>
-        <View style={styles.test}>
-          <Map setUserSelectedLocation={setUserSelectedLocation} />
-        </View>
-        <Text>Choose your Legend Category</Text>
-        <DropDownPicker
-          dropDownContainerStyle={{
-            backgroundColor: "#dfdfdf",
-          }}
-          open={open}
-          value={legendCategory}
-          items={items}
-          setOpen={setOpen}
-          setValue={setLegendCategory}
-          setItems={setItems}
-          bottomOffset={100}
-        />
-      </View>
+      {submited ? (
+        <Success setSubmited={setSubmited} />
+      ) : (
+        <>
+          <Text>Create a new Legend</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Title"
+              style={styles.input}
+              value={title}
+              onChangeText={(text) => setTitle(text)}
+            />
+            <TextInput
+              placeholder="Description"
+              multiline
+              numberOfLines={8}
+              style={styles.input}
+              value={description}
+              onChangeText={(text) => setDescription(text)}
+            />
+            <Text>Choose your Legend Location</Text>
+            <View style={styles.mapContainer}>
+              <Map
+                setUserSelectedLocation={setUserSelectedLocation}
+                userSelectedLocation={userSelectedLocation}
+              />
+            </View>
+            <Text>Choose your Legend Category</Text>
+            <DropDownPicker
+              dropDownContainerStyle={{
+                backgroundColor: "#dfdfdf",
+              }}
+              open={open}
+              value={legendCategory}
+              items={items}
+              setOpen={setOpen}
+              setValue={setLegendCategory}
+              setItems={setItems}
+              bottomOffset={100}
+            />
+          </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text>Create</Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text>Create</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </SafeAreaView>
   );
 };
@@ -90,8 +104,8 @@ const LegendForm = () => {
 export default LegendForm;
 
 const styles = StyleSheet.create({
-  test: {
-    height: "50%",
+  mapContainer: {
+    height: "30%",
     width: "100%",
   },
   container: {

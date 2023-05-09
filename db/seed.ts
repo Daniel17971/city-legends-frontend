@@ -32,7 +32,7 @@ function generateTestLegends(numOfLegends: number) {
   for (let i = 0; i < numOfLegends; i++) {
     // const legendId = faker.datatype.uuid();
     const coordinates = faker.address.nearbyGPSCoordinate(
-      [53.992119, -1.541812],
+      [52.4128, 1.5090],
       1
     );
     const legend = {
@@ -49,4 +49,4 @@ function generateTestLegends(numOfLegends: number) {
 
 // Seed test DB
 // generateTestUsers(3);
-generateTestLegends(10);
+generateTestLegends(3);

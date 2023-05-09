@@ -4,7 +4,7 @@ import MapView, { Callout, Marker } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 
-function Map({ setUserSelectedLocation }) {
+function Map({ setUserSelectedLocation, userSelectedLocation }) {
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
   const { width, height } = Dimensions.get("window");
@@ -350,6 +350,7 @@ function Map({ setUserSelectedLocation }) {
     return deg * (Math.PI / 180);
   }
   const onUserPress = (event) => {
+    console.log(event.nativeEvent.coordinate);
     setUserSelectedLocation(event.nativeEvent.coordinate);
   };
   return (
@@ -390,6 +391,17 @@ function Map({ setUserSelectedLocation }) {
                 );
               })
             : null}
+          {userSelectedLocation && (
+            <Marker
+              coordinate={userSelectedLocation}
+              style={{ height: 100, width: 100 }}
+            >
+              <Image
+                source={require("../assets/image1.png")}
+                style={{ height: 35, width: 35 }}
+              />
+            </Marker>
+          )}
         </MapView>
       )}
     </View>
