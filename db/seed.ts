@@ -1,8 +1,6 @@
 import { getDatabase, ref, set, push } from "firebase/database";
 import { faker } from "@faker-js/faker";
 import { app } from "../firebaseConfig";
-import { useContext } from "react";
-import { UserContext } from "../contexts/user";
 
 const db = getDatabase(app);
 
@@ -31,9 +29,8 @@ function generateTestUsers(numOfUsers: number) {
 }
 
 function generateTestLegends(numOfLegends: number) {
-  const { uid} = useContext(UserContext);
   for (let i = 0; i < numOfLegends; i++) {
-    const legendId = faker.datatype.uuid();
+    // const legendId = faker.datatype.uuid();
     const coordinates = faker.address.nearbyGPSCoordinate(
       [53.992119, -1.541812],
       1
@@ -41,11 +38,10 @@ function generateTestLegends(numOfLegends: number) {
     const legend = {
       title: faker.lorem.words(Math.floor(Math.random() * 6 + 10)),
       body: faker.lorem.words(Math.floor(Math.random() * 170 + 31)),
-      userId: uid,
       location: {
         latitude: coordinates[0],
         longitude: coordinates[1],
-      }
+      },
     };
     writeLegendData(legend);
   }
@@ -54,4 +50,3 @@ function generateTestLegends(numOfLegends: number) {
 // Seed test DB
 // generateTestUsers(3);
 generateTestLegends(10);
-
