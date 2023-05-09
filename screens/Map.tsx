@@ -18,10 +18,10 @@ import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
 import { getLegends } from "../db/api";
-import { get } from "firebase/database";
+
 import LegendMarker from "./LegendMarker";
 
-function Map() {
+function Map({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const [routeList, setRouteList] = useState([]);
@@ -31,7 +31,7 @@ function Map() {
   const [newRouteObj, setNewRouteObj] = useState({});
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
-
+  const [selectedLegend, setSelectedLegend] = useState(null);
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
   const latitudeDelta = 0.02;
@@ -128,6 +128,7 @@ function Map() {
   };
 
   const onMarkerPress = (item) => {
+    setSelectedLegend(item);
     if (isRoutePressed) {
       if (!newRouteObj.hasOwnProperty("origin")) {
         setNewRouteObj((currentObj) => {
@@ -235,6 +236,15 @@ function Map() {
                   );
                 })
               : null}
+            <Button
+              title={selectedLegend ? "legend" + selectedLegend.title : ""}
+              onPress={() => {
+                navigation.navigate("LegendPage", {
+                  id: selectedLegend.title,
+                  legend: selectedLegend,
+                });
+              }}
+            />
           </MapView>
         </View>
       )}
