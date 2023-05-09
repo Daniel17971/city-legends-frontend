@@ -37,7 +37,7 @@ function Map({ navigation }) {
   const aspectRatio = width / height;
   const latitudeDelta = 0.02;
   const longitudeDelta = latitudeDelta * aspectRatio;
-  const [radius, setRadius] = useState(0.5);
+  const [radius, setRadius] = useState(1);
 
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
@@ -258,6 +258,15 @@ function Map({ navigation }) {
               onValueChange={(event) => {
                 setRadius(event);
               }}
+              onSlidingComplete={(event) => {
+                setSlidingDone((currentValue) => {
+                  if (currentValue) {
+                    return false;
+                  } else {
+                    return true;
+                  }
+                });
+              }}
             />
 
             {location ? (
@@ -266,9 +275,9 @@ function Map({ navigation }) {
                   latitude: location["coords"]["latitude"],
                   longitude: location["coords"]["longitude"],
                 }}
-                radius={radius}
+                radius={radius * 1000}
                 strokeColor="red"
-                fillColor="red"
+                strokeWidth={5}
               />
             ) : null}
           </MapView>
