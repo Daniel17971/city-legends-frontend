@@ -1,14 +1,10 @@
 import {
-  Alert,
   Button,
   Dimensions,
-  Modal,
-  StyleSheet,
   Text,
   TextInput,
   View,
-  Image,
-  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MapView, { Marker, Callout } from "react-native-maps";
@@ -17,11 +13,8 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
-import { styled } from "nativewind";
+import { styles } from "../styles/styles";
 // import  MarkerClusterer  from "react-native-map-clustering"
-
-const StyledView = styled(View);
-const StyledText = styled(Text);
 
 const listOfLocations = [
   {
@@ -93,7 +86,6 @@ const listOfLocations = [
 // new MarkerClusterer(listOfLocations, Map)
 
 function Map() {
-
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const [routeList, setRouteList] = useState([]);
@@ -112,10 +104,9 @@ function Map() {
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
- 
-
   useEffect(() => {
     setIsLoading(true);
+
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
         if (status !== "granted") {
@@ -235,31 +226,48 @@ function Map() {
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <Text>... is loading</Text>
+        <View style={styles.mapLoadingContainer}>
+          <Text>Loading map</Text>
+          <ActivityIndicator animating={true} size={"large"}/>
+        </View>
       ) : (
         <View>
+          <View>
+            <ActivityIndicator animating={false} />
+          </View>
           {isRoutePressed ? (
-            <View>
+            <View style={styles.postRouteForm}>
               <TextInput
                 value={newName}
                 onChangeText={setNewName}
                 placeholder="Route name"
+                // styles={styles.routeNameInput}
               />
               {hasSubmitted ? (
-                <View style={styles.buttonContainer}>
-                  <Button title={"Confirm"} onPress={onConfirmPress} />
+                <View style={styles.formButtons}>
+                  <Button title={"Confirm"} onPress={onConfirmPress}/>
                 </View>
               ) : (
-                <View style={styles.submitbtn}>
-                  <Button title={"Submit"} onPress={onSubmitPress} />
-                </View>
+                <>
+                  <View style={styles.formButtons}>
+                    <View style={styles.formButtons}>
+                      <Button title={"Submit"} onPress={onSubmitPress} />
+                    </View>
+                  </View>
+                </>
               )}
-              <View style={styles.cancelbtn}>
-                <Button title={"Cancel"} onPress={onCancelPress} />
-              </View>
+              <>
+                <View>
+                  <View style={styles.formButtons}>
+                    <Button title={"Cancel"} onPress={onCancelPress} />
+                  </View>
+                </View>
+              </>
             </View>
           ) : (
-            <Button title={"Create route"} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onPress={onRoutePress} />
+            <View style={styles.formButtons}>
+              <Button title={"Create route"} onPress={onRoutePress} />
+            </View>
           )}
 
           <MapView
@@ -296,7 +304,6 @@ function Map() {
                       coordinate={item.location}
                       style={{ height: 100, width: 100 }}
                     >
-                      
                       <Callout>
                         <Text>{item.title}</Text>
                         {/* <Image
@@ -317,33 +324,3 @@ function Map() {
 }
 
 export default Map;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-  highlightedContainer: {
-    color: "blue",
-  },
-  buttonContainer: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    width: "100%",
-    marginTop: 10,
-  },
-  submitbtn: {
-    width: "40%",
-    padding: 5,
-    borderRadius: 50,
-  },
-  cancelbtn: {
-    width: "40%",
-    padding: 5,
-    borderRadius: 50,
-  },
-});
