@@ -22,3 +22,17 @@ export const postLegend = (legend: object) => {
     console.log(response);
   }).catch(error => alert(error))
 };
+
+export const getLegendById = (id) => {
+  return get(child(ref(db), `/legends/${id}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        console.log("No data found");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};

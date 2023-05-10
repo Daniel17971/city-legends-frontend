@@ -283,6 +283,7 @@ function Map({ navigation }) {
               }}
             />
           ) : null}
+          
           <Slider
             style={{ width: 200, height: 40 }}
             minimumValue={0}
