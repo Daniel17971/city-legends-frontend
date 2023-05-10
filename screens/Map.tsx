@@ -113,7 +113,7 @@ function Map({ navigation }) {
     setIsRoutePressed(false);
     setNewRouteObj({});
   };
-  // comment
+
   const onMarkerPress = (item) => {
     setSelectedLegend(item);
     if (isRoutePressed) {
