@@ -9,7 +9,6 @@ import { UserContextProvider } from "./contexts/user";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import Map from "./screens/Map";
-
 import User from "./screens/User";
 import LegendForm from "./screens/LegendForm";
 import MyStack from "./screens/Stack";
