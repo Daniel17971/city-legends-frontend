@@ -14,27 +14,19 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
+import { getLegends } from "../db/api";
 import Slider from "@react-native-community/slider";
 import LegendMarker from "./LegendMarker";
 import { read } from "react-native-fs";
 import { styles } from "../styles/styles";
-
-
-import { getLegends, getRoutes } from "../db/api";
-import { postRoutes } from "../db/api";
-
-import {objToArr} from "../utils/utils";
-
 import { DiscoveryContext } from "../contexts/discovery";
-import DiscoveryMap from "./DiscoveryMap";
 // import  MarkerClusterer  from "react-native-map-clustering"
 
 // new MarkerClusterer(listOfLocations, Map)
 
-function Map({ navigation }) {
-  const { discoveryModeStatus } = useContext(DiscoveryContext);
+function DiscoveryMap({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [slidingDone, setSlidingDone] = useState(true);
+
   const [routeList, setRouteList] = useState([]);
 
   const [newName, setNewName] = useState("");
@@ -45,8 +37,8 @@ function Map({ navigation }) {
   const [selectedLegend, setSelectedLegend] = useState(null);
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
-
-  const [radius, setRadius] = useState(1);
+  const [discoveredLegends, setDiscoveredLegends] = useState([]);
+  const [radius, setRadius] = useState(0.1);
   const latitudeDelta = 0.2 * (radius / 6.5);
   const longitudeDelta = latitudeDelta * aspectRatio;
   const [initialPosition, setInitialPosition] = useState(null);
@@ -87,13 +79,11 @@ function Map({ navigation }) {
           getLegends().then((data) => {
             return Object.values(data);
           }),
-          getRoutes().then((data) => objToArr(data)),
           data,
         ]);
       })
       .then((legends) => {
-        setRouteList(legends[1]);
-        setFilteredLocations((currentFilteredLocations) => {
+        return setFilteredLocations((currentFilteredLocations) => {
           return legends[0].filter((item) => {
             item["location"].latitude = +item["location"].latitude;
             item["location"].longitude = +item["location"].longitude;
@@ -101,19 +91,32 @@ function Map({ navigation }) {
             return (
               radius >
               getDistanceFromLatLonInKm(
-                legends[2].coords.latitude,
-                legends[2].coords.longitude,
+                legends[1].coords.latitude,
+                legends[1].coords.longitude,
                 item["location"].latitude,
                 item["location"].longitude
               )
             );
           });
         });
+      })
+      .then(() => {
+        setDiscoveredLegends((currentLegends) => {
+          if (currentLegends && filteredLocations) {
+            console.log(currentLegends, filteredLocations);
+            return [...currentLegends, ...filteredLocations];
+          } else {
+            return;
+          }
+        });
       });
-  }, [setLocation, setInitialPosition, setFilteredLocations, slidingDone]);
+  }, [
+    setLocation,
+    setInitialPosition,
+    setFilteredLocations,
+    setDiscoveredLegends,
+  ]);
 
-  console.log(routeList);
-  
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     let R = 6371; // Radius of the earth in km
     let dLat = deg2rad(lat2 - lat1); // deg2rad below
@@ -181,12 +184,6 @@ function Map({ navigation }) {
 
   const onConfirmPress = () => {
     if (newRouteObj["destination"]) {
-      postRoutes(newRouteObj).catch((err) => {
-        // Reset routelist in case of error
-        setRouteList((routeList) => {
-          return routeList.slice(0, -1);
-        });
-      });
       setRouteList((routeList) => {
         return [...routeList, newRouteObj];
       });
@@ -197,9 +194,7 @@ function Map({ navigation }) {
     } else return;
   };
 
-  return discoveryModeStatus ? (
-    <DiscoveryMap navigation />
-  ) : (
+  return (
     <View style={styles.container}>
       {isLoading ? (
         <View style={styles.mapLoadingContainer}>
@@ -282,17 +277,6 @@ function Map({ navigation }) {
                   );
                 })
               : null}
-            {location ? (
-              <Circle
-                center={{
-                  latitude: location["coords"]["latitude"],
-                  longitude: location["coords"]["longitude"],
-                }}
-                radius={radius * 1000}
-                strokeColor="red"
-                strokeWidth={5}
-              />
-            ) : null}
           </MapView>
           {selectedLegend ? (
             <Button
@@ -304,31 +288,10 @@ function Map({ navigation }) {
               }}
             />
           ) : null}
-
-          <Slider
-            style={{ width: 200, height: 40 }}
-            minimumValue={0}
-            maximumValue={100}
-            value={radius}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
-            onValueChange={(event) => {
-              setRadius(event);
-            }}
-            onSlidingComplete={(event) => {
-              setSlidingDone((currentValue) => {
-                if (currentValue) {
-                  return false;
-                } else {
-                  return true;
-                }
-              });
-            }}
-          />
         </View>
       )}
     </View>
   );
 }
 
-export default Map;
+export default DiscoveryMap;
