@@ -103,7 +103,6 @@ function DiscoveryMap({ navigation }) {
       .then(() => {
         setDiscoveredLegends((currentLegends) => {
           if (currentLegends && filteredLocations) {
-            console.log(currentLegends, filteredLocations);
             return [...currentLegends, ...filteredLocations];
           } else {
             return;

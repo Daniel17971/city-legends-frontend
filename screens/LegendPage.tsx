@@ -2,7 +2,7 @@ import { Text, View, Button, StyleSheet } from "react-native";
 
 const LegendPage = ({ navigation, route }) => {
   const { legend } = route.params;
-  console.log(legend, "<-- legend");
+
   return (
     <View style={styles.container}>
       <Button
@@ -18,10 +18,7 @@ const LegendPage = ({ navigation, route }) => {
   );
 };
 
-
-
 export default LegendPage;
-
 
 const styles = StyleSheet.create({
   container: {
@@ -49,6 +46,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     marginTop: 4
   },
+
   description: {
     color: "#ffffff",
     fontSize: 18,

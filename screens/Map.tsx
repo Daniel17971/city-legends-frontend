@@ -249,6 +249,15 @@ function Map({ navigation }) {
             })}
             {filteredLocations
               ? filteredLocations.map((item, index) => {
+                  if (item.legendCategory === "myth") {
+                    item.image = "../assets/myth.png";
+                  } else if (item.legendCategory === "personal") {
+                    item.image = "../assets/personal.png";
+                  } else if (item.legendCategory === "further_back_history") {
+                    item.image = "../assets/ancientHistory.png";
+                  } else if (item.legendCategory === "recent_history") {
+                    item.image = "../assets/recent_history.png";
+                  }
                   return (
                     <LegendMarker
                       item={item}
