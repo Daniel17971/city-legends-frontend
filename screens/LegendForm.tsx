@@ -37,6 +37,7 @@ const LegendForm = ({ navigation }) => {
       setDescription("");
       setTitle("");
       setLegendCategory(null);
+      setUserSelectedLocation(null);
       postLegend({
         title,
         description,
@@ -86,7 +87,7 @@ const LegendForm = ({ navigation }) => {
               bottomOffset={100}
             />
             <View style={styles.mapContainer}>
-              <FormMap setUserSelectedLocation={setUserSelectedLocation} />
+              <FormMap setUserSelectedLocation={setUserSelectedLocation} userSelectedLocation={userSelectedLocation}/>
             </View>
           </View>
 

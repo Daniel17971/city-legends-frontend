@@ -11,7 +11,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import MapView, { Marker, Callout } from "react-native-maps";
+import MapView, { Marker} from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
@@ -21,7 +21,7 @@ import { getLegends } from "../db/api";
 
 import LegendMarker from "./LegendMarker";
 
-function FormMap({ setUserSelectedLocation }) {
+function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
   const [routeList, setRouteList] = useState([]);
   const onRegionChange = (region) => {};
   const [location, setLocation] = useState(null);
@@ -158,7 +158,8 @@ function FormMap({ setUserSelectedLocation }) {
                   );
                 })
               : null}
-              </MapView>
+              {userSelectedLocation && <Marker coordinate={userSelectedLocation}></Marker>}
+          </MapView>
         </View>
       )}
     
