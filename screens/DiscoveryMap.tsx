@@ -20,15 +20,13 @@ import LegendMarker from "./LegendMarker";
 import { read } from "react-native-fs";
 import { styles } from "../styles/styles";
 import { DiscoveryContext } from "../contexts/discovery";
-import DiscoveryMap from "./DiscoveryMap";
 // import  MarkerClusterer  from "react-native-map-clustering"
 
 // new MarkerClusterer(listOfLocations, Map)
 
-function Map({ navigation }) {
-  const { discoveryModeStatus } = useContext(DiscoveryContext);
+function DiscoveryMap({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [slidingDone, setSlidingDone] = useState(true);
+
   const [routeList, setRouteList] = useState([]);
 
   const [newName, setNewName] = useState("");
@@ -39,8 +37,8 @@ function Map({ navigation }) {
   const [selectedLegend, setSelectedLegend] = useState(null);
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
-
-  const [radius, setRadius] = useState(1);
+  const [discoveredLegends, setDiscoveredLegends] = useState([]);
+  const [radius, setRadius] = useState(0.5);
   const latitudeDelta = 0.2 * (radius / 6.5);
   const longitudeDelta = latitudeDelta * aspectRatio;
   const [initialPosition, setInitialPosition] = useState(null);
@@ -85,7 +83,7 @@ function Map({ navigation }) {
         ]);
       })
       .then((legends) => {
-        setFilteredLocations((currentFilteredLocations) => {
+        return setFilteredLocations((currentFilteredLocations) => {
           return legends[0].filter((item) => {
             item["location"].latitude = +item["location"].latitude;
             item["location"].longitude = +item["location"].longitude;
@@ -101,8 +99,23 @@ function Map({ navigation }) {
             );
           });
         });
+      })
+      .then(() => {
+        setDiscoveredLegends((currentLegends) => {
+          if (currentLegends && filteredLocations) {
+            console.log(currentLegends, filteredLocations);
+            return [...currentLegends, ...filteredLocations];
+          } else {
+            return;
+          }
+        });
       });
-  }, [setLocation, setInitialPosition, setFilteredLocations, slidingDone]);
+  }, [
+    setLocation,
+    setInitialPosition,
+    setFilteredLocations,
+    setDiscoveredLegends,
+  ]);
 
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     let R = 6371; // Radius of the earth in km
@@ -181,9 +194,7 @@ function Map({ navigation }) {
     } else return;
   };
 
-  return discoveryModeStatus ? (
-    <DiscoveryMap navigation />
-  ) : (
+  return (
     <View style={styles.container}>
       {isLoading ? (
         <View style={styles.mapLoadingContainer}>
@@ -266,17 +277,6 @@ function Map({ navigation }) {
                   );
                 })
               : null}
-            {location ? (
-              <Circle
-                center={{
-                  latitude: location["coords"]["latitude"],
-                  longitude: location["coords"]["longitude"],
-                }}
-                radius={radius * 1000}
-                strokeColor="red"
-                strokeWidth={5}
-              />
-            ) : null}
           </MapView>
           {selectedLegend ? (
             <Button
@@ -288,31 +288,10 @@ function Map({ navigation }) {
               }}
             />
           ) : null}
-
-          <Slider
-            style={{ width: 200, height: 40 }}
-            minimumValue={0}
-            maximumValue={100}
-            value={radius}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
-            onValueChange={(event) => {
-              setRadius(event);
-            }}
-            onSlidingComplete={(event) => {
-              setSlidingDone((currentValue) => {
-                if (currentValue) {
-                  return false;
-                } else {
-                  return true;
-                }
-              });
-            }}
-          />
         </View>
       )}
     </View>
   );
 }
 
-export default Map;
+export default DiscoveryMap;
