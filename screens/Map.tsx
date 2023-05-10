@@ -281,27 +281,29 @@ function Map({ navigation }) {
               }}
             />
           ) : null}
-
-          <Slider
-            style={{ width: 200, height: 40 }}
-            minimumValue={0}
-            maximumValue={100}
-            value={radius}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
-            onValueChange={(event) => {
-              setRadius(event);
-            }}
-            onSlidingComplete={(event) => {
-              setSlidingDone((currentValue) => {
-                if (currentValue) {
-                  return false;
-                } else {
-                  return true;
-                }
-              });
-            }}
-          />
+          <View style={styles.container}>
+            <Text style={styles.sliderText}>Search range</Text>
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={100}
+              value={radius}
+              minimumTrackTintColor="green"
+              maximumTrackTintColor="grey"
+              onValueChange={(event) => {
+                setRadius(event);
+              }}
+              onSlidingComplete={(event) => {
+                setSlidingDone((currentValue) => {
+                  if (currentValue) {
+                    return false;
+                  } else {
+                    return true;
+                  }
+                });
+              }}
+            />
+          </View>
         </View>
       )}
     </View>

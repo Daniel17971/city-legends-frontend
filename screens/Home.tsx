@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { getLegends } from "../db/api";
 import * as Location from "expo-location";
 import { getDistanceFromLatLonInKm } from "../ultils/utils";
+import { styles } from "../styles/styles";
 
 function Home({ navigation }) {
   const { userEmail } = useContext(UserContext);
@@ -73,12 +74,12 @@ function Home({ navigation }) {
       </Text>
       <Text>radius : {radius} km</Text>
       <Slider
-        style={{ width: 200, height: 40 }}
+        style={styles.slider}
         minimumValue={0}
         maximumValue={100}
         value={radius}
-        minimumTrackTintColor="#FFFFFF"
-        maximumTrackTintColor="#000000"
+        minimumTrackTintColor="green"
+        maximumTrackTintColor="grey"
         onValueChange={(event) => {
           setRadius(event);
         }}

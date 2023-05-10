@@ -45,4 +45,19 @@ export const styles = StyleSheet.create({
     borderRadius: 0,
     padding: 5,
   },
+
+  slider: {
+    width: 200,
+  },
+
+  sliderText: {
+    fontWeight: "bold",
+    marginTop: 20,
+    marginLeft: 50,
+  },
+
+  sliderContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
 });
