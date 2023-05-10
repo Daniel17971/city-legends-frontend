@@ -32,6 +32,8 @@ export default function App() {
                   iconName = focused ? "map" : "map";
                 } else if (route.name === "User") {
                   iconName = focused ? "person" : "person";
+                } else if (route.name === "LegendForm") {
+                  iconName = focused ? "add" : "add";
                 }
 
                 // You can return any component that you like here!
@@ -53,14 +55,14 @@ export default function App() {
             />
 
             <Tab.Screen
-              name="LegendForm"
-              component={LegendForm}
-              options={{ title: "Create Legend" }}
-            />
-            <Tab.Screen
               name="Map"
               component={MyStack}
               options={{ title: "Map" }}
+            />
+            <Tab.Screen
+              name="LegendForm"
+              component={LegendForm}
+              options={{ title: "Create Legend" }}
             />
             <Tab.Screen
               name="User"
