@@ -18,9 +18,9 @@ export const getLegends = () => {
 };
 
 export const postLegend = (legend: object) => {
-  return push(ref(db, "legends/"), legend).then((response) => {
-    console.log(response);
-  }).catch(error => alert(error))
+  return push(ref(db, "legends/"), legend)
+    .then((response) => {})
+    .catch((error) => alert(error));
 };
 
 export const getLegendById = (id) => {
@@ -38,10 +38,10 @@ export const getLegendById = (id) => {
 };
 
 export const postRoutes = (route) => {
-  return push(ref(db, "routes/"), route).then((response) => {
-    console.log(response);
-  }).catch(error => alert(error))
-}
+  return push(ref(db, "routes/"), route)
+    .then((response) => {})
+    .catch((error) => alert(error));
+};
 
 export const getRoutes = () => {
   return get(child(ref(db), `/routes`))
