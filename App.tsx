@@ -12,61 +12,66 @@ import Map from "./screens/Map";
 import User from "./screens/User";
 import LegendForm from "./screens/LegendForm";
 import MyStack from "./screens/Stack";
+import { DiscoveryContextProvider } from "./contexts/discovery";
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <UserContextProvider>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
+      <DiscoveryContextProvider>
+        <NavigationContainer>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName;
 
-              if (route.name === "Home") {
-                iconName = focused ? "home" : "home";
-              } else if (route.name === "Map") {
-                iconName = focused ? "map" : "map";
-              } else if (route.name === "User") {
-                iconName = focused ? "person" : "person";
-              }
+                if (route.name === "Home") {
+                  iconName = focused ? "home" : "home";
+                } else if (route.name === "Map") {
+                  iconName = focused ? "map" : "map";
+                } else if (route.name === "User") {
+                  iconName = focused ? "person" : "person";
+                } else if (route.name === "LegendForm") {
+                  iconName = focused ? "add" : "add";
+                }
 
-              // You can return any component that you like here!
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: "tomato",
-            tabBarInactiveTintColor: "gray",
-          })}
-        >
-          <Tab.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false, tabBarStyle: { display: "none" } }}
-          />
-          <Tab.Screen
-            name="Home"
-            component={Home}
-            options={{ title: "Home" }}
-          />
+                // You can return any component that you like here!
+                return <Ionicons name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: "tomato",
+              tabBarInactiveTintColor: "gray",
+            })}
+          >
+            <Tab.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false, tabBarStyle: { display: "none" } }}
+            />
+            <Tab.Screen
+              name="Home"
+              component={Home}
+              options={{ title: "Home" }}
+            />
 
-          <Tab.Screen
-            name="LegendForm"
-            component={LegendForm}
-            options={{ title: "Create Legend" }}
-          />
-          <Tab.Screen
-            name="Map"
-            component={MyStack}
-            options={{ title: "Map" }}
-          />
-          <Tab.Screen
-            name="User"
-            component={User}
-            options={{ title: "User" }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
+            <Tab.Screen
+              name="Map"
+              component={MyStack}
+              options={{ title: "Map" }}
+            />
+            <Tab.Screen
+              name="LegendForm"
+              component={LegendForm}
+              options={{ title: "Create Legend" }}
+            />
+            <Tab.Screen
+              name="User"
+              component={User}
+              options={{ title: "User" }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </DiscoveryContextProvider>
     </UserContextProvider>
   );
 }
