@@ -111,7 +111,6 @@ function FormMap({ setUserSelectedLocation }) {
   }
 
   const onUserPress = (event) => {
-    console.log(event.nativeEvent.coordinate);
     setUserSelectedLocation(event.nativeEvent.coordinate);
   };
 
