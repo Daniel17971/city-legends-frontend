@@ -38,7 +38,7 @@ function DiscoveryMap({ navigation }) {
   const { width, height } = Dimensions.get("window");
   const aspectRatio = width / height;
   const [discoveredLegends, setDiscoveredLegends] = useState([]);
-  const [radius, setRadius] = useState(0.5);
+  const [radius, setRadius] = useState(0.1);
   const latitudeDelta = 0.2 * (radius / 6.5);
   const longitudeDelta = latitudeDelta * aspectRatio;
   const [initialPosition, setInitialPosition] = useState(null);
