@@ -48,6 +48,8 @@ const Login = () => {
   };
 
   const handleLogin = () => {
+    setEmail("");
+    setPassword("");
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const {email, uid} = userCredential.user;
