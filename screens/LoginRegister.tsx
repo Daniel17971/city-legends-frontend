@@ -64,6 +64,7 @@ const LoginRegister = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>City Legends</Text>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -119,6 +120,16 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  title: {
+    fontSize: 35,
+    color: "#ffe11b",
+    fontWeight: "700",
+    marginTop: -50,
+    marginBottom: 50,
+    textShadowColor: 'black', 
+    textShadowOffset: { width: -1, height: 0 },
+    textShadowRadius: 2, 
   },
   inputContainer: {
     width: "80%",
