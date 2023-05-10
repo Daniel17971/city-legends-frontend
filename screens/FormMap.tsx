@@ -178,6 +178,7 @@ export default FormMap;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 1
   },
   map: {
     width: "100%",

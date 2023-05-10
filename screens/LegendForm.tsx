@@ -56,45 +56,46 @@ const LegendForm = ({ navigation }) => {
         <Success setSubmited={setSubmited} />
       ) : (
         <>
-          <Text>Create a new Legend</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Title"
-              style={styles.input}
-              value={title}
-              onChangeText={(text) => setTitle(text)}
-            />
-            <TextInput
-              placeholder="Description"
-              multiline
-              numberOfLines={8}
-              style={styles.input}
-              value={description}
-              onChangeText={(text) => setDescription(text)}
-            />
-            <Text>Choose your Legend Location</Text>
-
-            <Text>Choose your Legend Category</Text>
-            <DropDownPicker
-              dropDownContainerStyle={{
-                backgroundColor: "#dfdfdf",
-              }}
-              open={open}
-              value={legendCategory}
-              items={items}
-              setOpen={setOpen}
-              setValue={setLegendCategory}
-              setItems={setItems}
-              bottomOffset={100}
-            />
-            <View style={styles.mapContainer}>
-              <FormMap setUserSelectedLocation={setUserSelectedLocation} userSelectedLocation={userSelectedLocation}/>
+          <View style={styles.formContainer}>
+            <View style={styles.inputsContainer}>
+              <TextInput
+                placeholder="Title"
+                style={styles.input}
+                value={title}
+                onChangeText={(text) => setTitle(text)}
+              />
+              <TextInput
+                placeholder="Description"
+                multiline
+                numberOfLines={8}
+                style={styles.input}
+                value={description}
+                onChangeText={(text) => setDescription(text)}
+              />
+              <DropDownPicker
+                style={styles.input}
+                open={open}
+                value={legendCategory}
+                items={items}
+                placeholder="Select a Legend category"
+                setOpen={setOpen}
+                setValue={setLegendCategory}
+                setItems={setItems}
+                bottomOffset={100}
+              />
             </View>
-          </View>
+            <Text>Choose your Legend Location</Text>
+            <View style={styles.mapContainer}>
+              <FormMap
+                setUserSelectedLocation={setUserSelectedLocation}
+                userSelectedLocation={userSelectedLocation}
+              />
+            </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text>Create</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text>Create</Text>
+            </TouchableOpacity>
+          </View>
         </>
       )}
     </SafeAreaView>
@@ -104,23 +105,34 @@ const LegendForm = ({ navigation }) => {
 export default LegendForm;
 
 const styles = StyleSheet.create({
-  mapContainer: {
-    height: "30%",
-    width: "100%",
-  },
   container: {
     flex: 1,
+    backgroundColor: "blue",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     border: "2px solid black",
   },
-  inputContainer: {
+  formContainer: {
+    backgroundColor: "pink",
+    height: "90%",
     width: "90%",
+  },
+  inputsContainer: {
+    zIndex: 9999,
+    width: "90%",
+    alignSelf: "center",
+  },
+  mapContainer: {
+    height: "30%",
+    width: "100%",
+    alignSelf: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
   map: {
     width: "100%",
-    height: "30%",
+    height: "50%",
   },
   input: {
     backgroundColor: "white",
@@ -129,17 +141,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 5,
   },
-  inputDesc: {
-    height: "40%",
-  },
-  textThing: {
-    display: "none",
-  },
   button: {
     backgroundColor: "#21aa8a",
     width: "90%",
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 15,
     borderRadius: 10,
   },
-  dropdown: {},
 });
