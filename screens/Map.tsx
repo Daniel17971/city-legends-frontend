@@ -19,14 +19,12 @@ import LegendMarker from "./LegendMarker";
 import { read } from "react-native-fs";
 import { styles } from "../styles/styles";
 
-
 import { getLegends, getRoutes } from "../db/api";
 import { postRoutes } from "../db/api";
 
-import {objToArr} from "../utils/utils";
-
 import { DiscoveryContext } from "../contexts/discovery";
 import DiscoveryMap from "./DiscoveryMap";
+import { getDistanceFromLatLonInKm, objToArr } from "../ultils/utils";
 // import  MarkerClusterer  from "react-native-map-clustering"
 
 // new MarkerClusterer(listOfLocations, Map)
@@ -111,27 +109,6 @@ function Map({ navigation }) {
         });
       });
   }, [setLocation, setInitialPosition, setFilteredLocations, slidingDone]);
-
-  console.log(routeList);
-  
-  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-    let R = 6371; // Radius of the earth in km
-    let dLat = deg2rad(lat2 - lat1); // deg2rad below
-    let dLon = deg2rad(lon2 - lon1);
-    let a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(deg2rad(lat1)) *
-        Math.cos(deg2rad(lat2)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    let d = R * c; // Distance in km
-    return d;
-  }
-
-  function deg2rad(deg) {
-    return deg * (Math.PI / 180);
-  }
 
   const onRoutePress = () => {
     setIsRoutePressed(true);
