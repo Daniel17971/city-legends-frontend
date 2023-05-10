@@ -113,14 +113,12 @@ export default LegendForm;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "blue",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     border: "2px solid black",
   },
   formContainer: {
-    backgroundColor: "pink",
     height: "90%",
     width: "90%",
   },
