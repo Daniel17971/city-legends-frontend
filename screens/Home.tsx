@@ -5,7 +5,7 @@ import { UserContext } from "../contexts/user";
 import { useContext } from "react";
 import { getLegends } from "../db/api";
 import * as Location from "expo-location";
-import { getDistanceFromLatLonInKm } from "../ultils/utils";
+import { getDistanceFromLatLonInKm } from "../utils/utils";
 
 function Home({ navigation }) {
   const { userEmail } = useContext(UserContext);
