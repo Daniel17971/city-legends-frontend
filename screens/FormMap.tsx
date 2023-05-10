@@ -129,7 +129,9 @@ function FormMap({ setUserSelectedLocation }) {
             showsUserLocation={true}
             onPress={onUserPress}
           >
-            {routeList.map((route, index) => {
+           
+          
+          {routeList.map((route, index) => {
               return (
                 <MapViewDirections
                   key={index}
@@ -156,9 +158,10 @@ function FormMap({ setUserSelectedLocation }) {
                   );
                 })
               : null}
-          </MapView>
+              </MapView>
         </View>
       )}
+    
     </View>
   );
 }

@@ -1,13 +1,10 @@
 import {
-  Alert,
   Button,
   Dimensions,
-  Modal,
-  StyleSheet,
   Text,
   TextInput,
   View,
-  Image,
+  ActivityIndicator,
   TouchableHighlight,
 } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -21,6 +18,10 @@ import { getLegends } from "../db/api";
 import Slider from "@react-native-community/slider";
 import LegendMarker from "./LegendMarker";
 import { read } from "react-native-fs";
+import { styles } from "../styles/styles";
+// import  MarkerClusterer  from "react-native-map-clustering"
+
+// new MarkerClusterer(listOfLocations, Map)
 
 function Map({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -180,26 +181,50 @@ function Map({ navigation }) {
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <Text>... is loading</Text>
+        <View style={styles.mapLoadingContainer}>
+          <Text>Loading map</Text>
+          <ActivityIndicator animating={true} size={"large"} />
+        </View>
       ) : (
         <View>
+          <View>
+            <ActivityIndicator animating={false} />
+          </View>
           {isRoutePressed ? (
-            <View>
+            <View style={styles.postRouteForm}>
               <TextInput
                 value={newName}
                 onChangeText={setNewName}
                 placeholder="Route name"
+                style={styles.routeNameInput}
               />
               {hasSubmitted ? (
-                <Button title={"Confirm"} onPress={onConfirmPress} />
+                <View style={styles.formButtons}>
+                  <View>
+                    <Button title={"Confirm"} onPress={onConfirmPress} />
+                  </View>
+                </View>
               ) : (
-                <Button title={"Submit"} onPress={onSubmitPress} />
+                <>
+                  <View style={styles.formButtons}>
+                    <View>
+                      <Button title={"Submit"} onPress={onSubmitPress} />
+                    </View>
+                  </View>
+                </>
               )}
-
-              <Button title={"Cancel"} onPress={onCancelPress} />
+              <>
+                <View style={styles.formButtons}>
+                  <View>
+                    <Button title={"Cancel"} onPress={onCancelPress} />
+                  </View>
+                </View>
+              </>
             </View>
           ) : (
-            <Button title={"Create route"} onPress={onRoutePress} />
+            <View style={styles.formButtons}>
+              <Button title={"Create route"} onPress={onRoutePress} />
+            </View>
           )}
 
           <MapView
@@ -236,47 +261,48 @@ function Map({ navigation }) {
                   );
                 })
               : null}
-            <Button
-              title={selectedLegend ? "legend" + selectedLegend.title : ""}
-              onPress={() => {
-                navigation.navigate("LegendPage", {
-                  legend: selectedLegend,
-                });
+               {location ? (
+            <Circle
+              center={{
+                latitude: location["coords"]["latitude"],
+                longitude: location["coords"]["longitude"],
               }}
+              radius={radius * 1000}
+              strokeColor="red"
+              strokeWidth={5}
             />
-            <Slider
-              style={{ width: 200, height: 40 }}
-              minimumValue={0}
-              maximumValue={100}
-              value={radius}
-              minimumTrackTintColor="#FFFFFF"
-              maximumTrackTintColor="#000000"
-              onValueChange={(event) => {
-                setRadius(event);
-              }}
-              onSlidingComplete={(event) => {
-                setSlidingDone((currentValue) => {
-                  if (currentValue) {
-                    return false;
-                  } else {
-                    return true;
-                  }
-                });
-              }}
-            />
-
-            {location ? (
-              <Circle
-                center={{
-                  latitude: location["coords"]["latitude"],
-                  longitude: location["coords"]["longitude"],
-                }}
-                radius={radius * 1000}
-                strokeColor="red"
-                strokeWidth={5}
-              />
-            ) : null}
+          ) : null}
           </MapView>
+          <Button
+            title={selectedLegend ? "legend" + selectedLegend.title : ""}
+            onPress={() => {
+              navigation.navigate("LegendPage", {
+                legend: selectedLegend,
+              });
+            }}
+          />
+          <Slider
+            style={{ width: 200, height: 40 }}
+            minimumValue={0}
+            maximumValue={100}
+            value={radius}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+            onValueChange={(event) => {
+              setRadius(event);
+            }}
+            onSlidingComplete={(event) => {
+              setSlidingDone((currentValue) => {
+                if (currentValue) {
+                  return false;
+                } else {
+                  return true;
+                }
+              });
+            }}
+          />
+
+         
         </View>
       )}
     </View>
@@ -284,16 +310,3 @@ function Map({ navigation }) {
 }
 
 export default Map;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-  highlightedContainer: {
-    color: "blue",
-  },
-});
