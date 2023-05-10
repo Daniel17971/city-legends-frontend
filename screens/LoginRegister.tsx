@@ -18,13 +18,14 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-import {UserContext} from "../contexts/user"
+import { UserContext } from "../contexts/user";
 import { useContext } from "react";
 
-const Login = () => {
+const LoginRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {setUserEmail, setUid} = useContext(UserContext);
+  const [isRegistering, setIsRegistering] = useState(false);
+  const { setUserEmail, setUid } = useContext(UserContext);
 
   const navigation = useNavigation();
   const auth = getAuth(app);
@@ -38,11 +39,13 @@ const Login = () => {
   }, []);
 
   const handleSingUp = () => {
+    setEmail("");
+    setPassword("");
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const {email, uid} = userCredential.user;
-        setUserEmail(email)
-        setUid(uid)
+        const { email, uid } = userCredential.user;
+        setUserEmail(email);
+        setUid(uid);
       })
       .catch((err) => alert(err.message));
   };
@@ -52,9 +55,9 @@ const Login = () => {
     setPassword("");
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        const {email, uid} = userCredential.user;
-        setUserEmail(email)
-        setUid(uid)
+        const { email, uid } = userCredential.user;
+        setUserEmail(email);
+        setUid(uid);
       })
       .catch((error) => alert(error.message));
   };
@@ -76,24 +79,39 @@ const Login = () => {
           secureTextEntry
         />
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={handleSingUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.buttonOutlineText}>Register</Text>
-        </TouchableOpacity>
-      </View>
+      {isRegistering ? (
+        <>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              onPress={handleSingUp}
+              style={[styles.button, styles.buttonOutline]}
+            >
+              <Text style={styles.buttonOutlineText}>Register</Text>
+            </TouchableOpacity>
+          </View>
+          <Text>
+            Already have an account? Login{" "}
+            <Text style={styles.link} onPress={() => setIsRegistering(false)}>here</Text>!
+          </Text>
+        </>
+      ) : (
+        <>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={handleLogin} style={styles.button}>
+              <Text style={styles.buttonText}>Login</Text>
+            </TouchableOpacity>
+          </View>
+          <Text>
+            Don't have an account? Register{" "}
+            <Text style={styles.link} onPress={() => setIsRegistering(true)}>here</Text>!
+          </Text>
+        </>
+      )}
     </SafeAreaView>
   );
 };
 
-export default Login;
+export default LoginRegister;
 
 const styles = StyleSheet.create({
   container: {
@@ -104,6 +122,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: "80%",
+  },
+  link: {
+    color: "blue",
   },
   input: {
     backgroundColor: "white",

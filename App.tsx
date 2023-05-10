@@ -6,7 +6,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { UserContextProvider } from "./contexts/user";
 
 import Home from "./screens/Home";
-import Login from "./screens/Login";
+import LoginRegister from "./screens/LoginRegister";
 import Map from "./screens/Map";
 import User from "./screens/User";
 import LegendForm from "./screens/LegendForm";
@@ -47,7 +47,7 @@ export default function App() {
               {}
               <Tab.Screen
                 name="Logout"
-                component={Login}
+                component={LoginRegister}
                 options={{
                   headerShown: false,
                   tabBarStyle: { display: "none" },
