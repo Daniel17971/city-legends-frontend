@@ -261,26 +261,28 @@ function Map({ navigation }) {
                   );
                 })
               : null}
-               {location ? (
-            <Circle
-              center={{
-                latitude: location["coords"]["latitude"],
-                longitude: location["coords"]["longitude"],
+            {location ? (
+              <Circle
+                center={{
+                  latitude: location["coords"]["latitude"],
+                  longitude: location["coords"]["longitude"],
+                }}
+                radius={radius * 1000}
+                strokeColor="red"
+                strokeWidth={5}
+              />
+            ) : null}
+          </MapView>
+          {selectedLegend ? (
+            <Button
+              title={selectedLegend ? "legend" + selectedLegend.title : ""}
+              onPress={() => {
+                navigation.navigate("LegendPage", {
+                  legend: selectedLegend,
+                });
               }}
-              radius={radius * 1000}
-              strokeColor="red"
-              strokeWidth={5}
             />
           ) : null}
-          </MapView>
-          <Button
-            title={selectedLegend ? "legend" + selectedLegend.title : ""}
-            onPress={() => {
-              navigation.navigate("LegendPage", {
-                legend: selectedLegend,
-              });
-            }}
-          />
           <Slider
             style={{ width: 200, height: 40 }}
             minimumValue={0}
@@ -301,8 +303,6 @@ function Map({ navigation }) {
               });
             }}
           />
-
-         
         </View>
       )}
     </View>

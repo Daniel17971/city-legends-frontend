@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    height: "80%",
+    height: "70%",
   },
   postRouteForm: {
     display: "flex",
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 10,
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
   },
 
   formButtons: {
@@ -44,5 +44,5 @@ export const styles = StyleSheet.create({
     alignContent: "center",
     borderRadius: 0,
     padding: 5,
-  }
+  },
 });
