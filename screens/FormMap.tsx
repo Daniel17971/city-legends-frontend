@@ -9,6 +9,7 @@ import {
   View,
   Image,
   TouchableHighlight,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
@@ -117,9 +118,13 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
   return (
     <View style={styles.container}>
       {isLoading ? (
-        <Text>... is loading</Text>
+        <View >
+        <Text>Loading map</Text>
+        <ActivityIndicator animating={true} size={"large"} />
+        </View>
       ) : (
         <View>
+          <ActivityIndicator animating={false} size={"large"} />
           <MapView
             provider={PROVIDER_GOOGLE}
             style={styles.map}
