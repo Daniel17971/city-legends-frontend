@@ -275,7 +275,6 @@ function Map({ navigation }) {
                 }}
                 radius={radius * 1000}
                 strokeColor="red"
-                fillColor="red"
                 strokeWidth={5}
               />
             ) : null}
