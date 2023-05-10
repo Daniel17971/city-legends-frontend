@@ -276,8 +276,9 @@ function Map({ navigation }) {
           <Button
             title={selectedLegend ? "legend" + selectedLegend.title : ""}
             onPress={() => {
+              console.log(selectedLegend);
               navigation.navigate("LegendPage", {
-                legend: selectedLegend,
+                legend: selectedLegend
               });
             }}
           />
