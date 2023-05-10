@@ -14,11 +14,17 @@ import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
-import { getLegends } from "../db/api";
 import Slider from "@react-native-community/slider";
 import LegendMarker from "./LegendMarker";
 import { read } from "react-native-fs";
 import { styles } from "../styles/styles";
+
+
+import { getLegends, getRoutes } from "../db/api";
+import { postRoutes } from "../db/api";
+
+import {objToArr} from "../utils/utils";
+
 import { DiscoveryContext } from "../contexts/discovery";
 import DiscoveryMap from "./DiscoveryMap";
 // import  MarkerClusterer  from "react-native-map-clustering"
@@ -81,10 +87,12 @@ function Map({ navigation }) {
           getLegends().then((data) => {
             return Object.values(data);
           }),
+          getRoutes().then((data) => objToArr(data)),
           data,
         ]);
       })
       .then((legends) => {
+        setRouteList(legends[1]);
         setFilteredLocations((currentFilteredLocations) => {
           return legends[0].filter((item) => {
             item["location"].latitude = +item["location"].latitude;
@@ -93,8 +101,8 @@ function Map({ navigation }) {
             return (
               radius >
               getDistanceFromLatLonInKm(
-                legends[1].coords.latitude,
-                legends[1].coords.longitude,
+                legends[2].coords.latitude,
+                legends[2].coords.longitude,
                 item["location"].latitude,
                 item["location"].longitude
               )
@@ -104,6 +112,8 @@ function Map({ navigation }) {
       });
   }, [setLocation, setInitialPosition, setFilteredLocations, slidingDone]);
 
+  console.log(routeList);
+  
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
     let R = 6371; // Radius of the earth in km
     let dLat = deg2rad(lat2 - lat1); // deg2rad below
@@ -171,6 +181,12 @@ function Map({ navigation }) {
 
   const onConfirmPress = () => {
     if (newRouteObj["destination"]) {
+      postRoutes(newRouteObj).catch((err) => {
+        // Reset routelist in case of error
+        setRouteList((routeList) => {
+          return routeList.slice(0, -1);
+        });
+      });
       setRouteList((routeList) => {
         return [...routeList, newRouteObj];
       });
