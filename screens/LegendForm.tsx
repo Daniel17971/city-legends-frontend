@@ -84,17 +84,23 @@ const LegendForm = ({ navigation }) => {
                 bottomOffset={100}
               />
             </View>
-            <Text>Choose your Legend Location</Text>
-            <View style={styles.mapContainer}>
-              <FormMap
-                setUserSelectedLocation={setUserSelectedLocation}
-                userSelectedLocation={userSelectedLocation}
-              />
+            <View>
+            <Text style={styles.chooseLocation}>
+                  Choose your Legend Location
+                </Text>
+              <View style={styles.mapContainer}>
+               
+                <View>
+                  <FormMap
+                    setUserSelectedLocation={setUserSelectedLocation}
+                    userSelectedLocation={userSelectedLocation}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text>Create Legend</Text>
+              </TouchableOpacity>
             </View>
-
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text>Create</Text>
-            </TouchableOpacity>
           </View>
         </>
       )}
@@ -123,8 +129,13 @@ const styles = StyleSheet.create({
     width: "90%",
     alignSelf: "center",
   },
+  chooseLocation: {
+    zIndex: 1,
+    padding: 0,
+    alignSelf: "center",
+  },
   mapContainer: {
-    height: "30%",
+    height: "55%",
     width: "100%",
     alignSelf: "center",
     alignContent: "center",
@@ -132,14 +143,16 @@ const styles = StyleSheet.create({
   },
   map: {
     width: "100%",
-    height: "50%",
+    height: "30%",
+    border: "2px solid black",
   },
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
+    marginTop: 2.5,
+    marginBottom: 2.5,
   },
   button: {
     backgroundColor: "#21aa8a",

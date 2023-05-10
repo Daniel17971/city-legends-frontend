@@ -116,14 +116,14 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       {isLoading ? (
-        <View >
-        <Text>Loading map</Text>
-        <ActivityIndicator animating={true} size={"large"} />
+        <View style={styles.formMapLoading}>
+          <Text>Loading map</Text>
+          <ActivityIndicator animating={true} size={"large"} />
         </View>
       ) : (
-        <View>
+        <View style={styles.mapContainer}>
           <ActivityIndicator animating={false} size={"large"} />
           <MapView
             provider={PROVIDER_GOOGLE}
@@ -178,7 +178,11 @@ export default FormMap;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    zIndex: 1
+    zIndex: 1,
+  },
+  formMapLoading: {
+    alignSelf: "center",
+    padding: 5,
   },
   map: {
     width: "100%",
@@ -186,5 +190,11 @@ const styles = StyleSheet.create({
   },
   highlightedContainer: {
     color: "blue",
+  },
+  mapContainer: {
+    width: "100%",
+    alignSelf: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
 });
