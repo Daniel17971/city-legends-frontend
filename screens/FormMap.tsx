@@ -11,7 +11,7 @@ import {
   TouchableHighlight,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import MapView, { Marker} from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
@@ -129,9 +129,7 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
             showsUserLocation={true}
             onPress={onUserPress}
           >
-           
-          
-          {routeList.map((route, index) => {
+            {routeList.map((route, index) => {
               return (
                 <MapViewDirections
                   key={index}
@@ -153,16 +151,19 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
                       item={item}
                       index={index}
                       key={index}
-                      onMarkerPress={null}
+                      onMarkerPress={() => {
+                        return "";
+                      }}
                     />
                   );
                 })
               : null}
-              {userSelectedLocation && <Marker coordinate={userSelectedLocation}></Marker>}
+            {userSelectedLocation && (
+              <Marker coordinate={userSelectedLocation}></Marker>
+            )}
           </MapView>
         </View>
       )}
-    
     </View>
   );
 }
