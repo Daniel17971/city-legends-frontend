@@ -36,3 +36,23 @@ export const getLegendById = (id) => {
       console.error(error);
     });
 };
+
+export const postRoutes = (route) => {
+  return push(ref(db, "routes/"), route).then((response) => {
+    console.log(response);
+  }).catch(error => alert(error))
+}
+
+export const getRoutes = () => {
+  return get(child(ref(db), `/routes`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        console.log("No data found");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
