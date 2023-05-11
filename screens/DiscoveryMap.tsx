@@ -6,7 +6,7 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MapView from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
@@ -19,7 +19,16 @@ import { styles } from "../styles/mapStyles";
 
 function DiscoveryMap({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [time, setTime] = useState(new Date());
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+  console.log("here");
   const [routeList, setRouteList] = useState([]);
 
   const [newName, setNewName] = useState("");
