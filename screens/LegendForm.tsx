@@ -98,7 +98,7 @@ const LegendForm = ({ navigation }) => {
                 </View>
               </View>
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text>Create Legend</Text>
+                <Text style={styles.buttonText}>Create Legend</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -117,6 +117,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     border: "2px solid black",
+    borderColor: "#FFE11B",
+    backgroundColor: "#2E2E9F",
   },
   formContainer: {
     height: "90%",
@@ -128,12 +130,14 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   chooseLocation: {
+    fontWeight: "700",
+    color: "#FFE11B",
     zIndex: 1,
     padding: 0,
     alignSelf: "center",
   },
   mapContainer: {
-    height: "55%",
+    height: "57%",
     width: "100%",
     alignSelf: "center",
     alignContent: "center",
@@ -142,7 +146,6 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "30%",
-    border: "2px solid black",
   },
   input: {
     backgroundColor: "white",
@@ -153,7 +156,8 @@ const styles = StyleSheet.create({
     marginBottom: 2.5,
   },
   button: {
-    backgroundColor: "#21aa8a",
+    fontWeight: "700",
+    backgroundColor: "#FF7700",
     width: "90%",
     alignSelf: "center",
     alignItems: "center",
@@ -161,4 +165,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
   },
+  buttonText: {
+    fontWeight: "700"
+  }
 });
+
+

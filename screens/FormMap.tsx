@@ -19,8 +19,8 @@ import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
 import { getLegends } from "../db/api";
-
 import LegendMarker from "./LegendMarker";
+import { styles } from "../styles/formMapstyles";
 
 function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
   const [routeList, setRouteList] = useState([]);
@@ -119,7 +119,7 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
     <View>
       {isLoading ? (
         <View style={styles.formMapLoading}>
-          <Text>Loading map</Text>
+          <Text style={styles.mapLoadingText}>Loading map</Text>
           <ActivityIndicator animating={true} size={"large"} />
         </View>
       ) : (
@@ -174,24 +174,3 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
 }
 
 export default FormMap;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    zIndex: 1,
-  },
-  formMapLoading: {
-    alignSelf: "center",
-    padding: 5,
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-  mapContainer: {
-    width: "100%",
-    alignSelf: "center",
-    alignContent: "center",
-    justifyContent: "center",
-  },
-});

@@ -22,22 +22,24 @@ export default Success;
 
 const styles = StyleSheet.create({
   createdLegend: {
+    color: "#FF7700",
     textAlign:"center",
     fontSize: 30,
     fontWeight: "700",
-    padding: 15,
+    padding: 20,
+    maxWidth: "70%"
   },
   button: {
-    color: "blue",
     alignSelf: "center",
-    backgroundColor: "blue",
+    backgroundColor: "#FFE11B"
+    ,
     width: "100%",
     padding: 15,
     borderRadius: 10,
   },
   backButtonText: {
-    color:"white",
-    fontWeight: "500",
+    color:"black",
+    fontWeight: "700",
     fontSize: 16,
   },
 });
