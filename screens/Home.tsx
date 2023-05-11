@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { getLegends } from "../db/api";
 import * as Location from "expo-location";
 
-import { getDistanceFromLatLonInKm } from "../ultils/utils";
+import { getDistanceFromLatLonInKm } from "../utils/utils";
 import { styles } from "../styles/homeStyles";
 
 function Home({ navigation }) {
