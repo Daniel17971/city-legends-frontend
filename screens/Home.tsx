@@ -5,8 +5,8 @@ import { UserContext } from "../contexts/user";
 import { useContext } from "react";
 import { getLegends } from "../db/api";
 import * as Location from "expo-location";
-import { getDistanceFromLatLonInKm } from "../ultils/utils";
-
+import { displayDistance, getDistanceFromLatLonInKm } from "../ultils/utils";
+import { styles } from "../styles/homeStyles";
 function Home({ navigation }) {
   const { userEmail } = useContext(UserContext);
   const [radius, setRadius] = useState(1);
@@ -62,36 +62,41 @@ function Home({ navigation }) {
           });
         });
       });
-  }, [setLocation, , setFilteredLegends, slidingDone]);
+  }, [setLocation, setFilteredLegends, slidingDone]);
 
   return isLoading ? (
     <Text>is Loading ...</Text>
   ) : (
     <View style={styles.page}>
-      <Text className="mt-2 text-lg text-black dark:text-white">
-        Welcome {userEmail} These are your local City Legends !
-      </Text>
-      <Text>radius : {radius} km</Text>
-      <Slider
-        style={{ width: 200, height: 40 }}
-        minimumValue={0}
-        maximumValue={100}
-        value={radius}
-        minimumTrackTintColor="#FFFFFF"
-        maximumTrackTintColor="#000000"
-        onValueChange={(event) => {
-          setRadius(event);
-        }}
-        onSlidingComplete={(event) => {
-          setSlidingDone((currentValue) => {
-            if (currentValue) {
-              return false;
-            } else {
-              return true;
-            }
-          });
-        }}
-      />
+      <View>
+        <Text
+          style={styles.headerText}
+          className="mt-2 text-lg text-black dark:text-white"
+        >
+          Welcome {userEmail} These are your local City Legends !
+        </Text>
+        <Text style={styles.headerText}>radius : {radius} km</Text>
+        <Slider
+          style={{ width: 200, height: 40 }}
+          minimumValue={0}
+          maximumValue={100}
+          value={radius}
+          minimumTrackTintColor="#FFFFFF"
+          maximumTrackTintColor="#000000"
+          onValueChange={(event) => {
+            setRadius(event);
+          }}
+          onSlidingComplete={(event) => {
+            setSlidingDone((currentValue) => {
+              if (currentValue) {
+                return false;
+              } else {
+                return true;
+              }
+            });
+          }}
+        />
+      </View>
       <ScrollView>
         {filteredLegends.map((legend, index) => {
           return (
@@ -99,7 +104,7 @@ function Home({ navigation }) {
               <Text style={styles.titleText}>{legend.title}</Text>
               <Text style={styles.text}>
                 You are{" "}
-                {getDistanceFromLatLonInKm(
+                {displayDistance(
                   location.coords.latitude,
                   location.coords.longitude,
                   legend.location.latitude,
@@ -117,26 +122,3 @@ function Home({ navigation }) {
 }
 
 export default Home;
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
-  list: {
-    margin: 5,
-    justifyContent: "center",
-    borderColor: "red",
-    backgroundColor: "#FF7700",
-    borderRadius: 10,
-  },
-  text: {
-    textAlign: "center",
-    color: "white",
-  },
-  titleText: {
-    fontSize: 20,
-    textAlign: "center",
-    color: "white",
-    fontWeight: "bold",
-  },
-});

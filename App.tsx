@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { UserContextProvider } from "./contexts/user";
-
+import { useFonts } from "expo-font";
 import Home from "./screens/Home";
 import LoginRegister from "./screens/LoginRegister";
 import Map from "./screens/Map";
@@ -18,6 +18,11 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [fontsLoaded] = useFonts({
+    "Poppins-Black": require("./assets/fonts/Poppins-Black.ttf"),
+    "Poppins-Light": require("./assets/fonts/Poppins-Light.ttf"),
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+  });
   return (
     <UserContextProvider>
       <DiscoveryContextProvider>
