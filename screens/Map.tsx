@@ -24,7 +24,7 @@ import { postRoutes } from "../db/api";
 
 import { DiscoveryContext } from "../contexts/discovery";
 import DiscoveryMap from "./DiscoveryMap";
-import { getDistanceFromLatLonInKm, objToArr } from "../ultils/utils";
+import { getDistanceFromLatLonInKm, objToArr } from "../utils/utils";
 // import  MarkerClusterer  from "react-native-map-clustering"
 
 // new MarkerClusterer(listOfLocations, Map)

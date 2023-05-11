@@ -5,8 +5,10 @@ import { UserContext } from "../contexts/user";
 import { useContext } from "react";
 import { getLegends } from "../db/api";
 import * as Location from "expo-location";
+
 import { getDistanceFromLatLonInKm } from "../ultils/utils";
 import { styles } from "../styles/homeStyles";
+
 function Home({ navigation }) {
   const { userEmail } = useContext(UserContext);
   const [radius, setRadius] = useState(1);
