@@ -19,16 +19,7 @@ import { styles } from "../styles/mapStyles";
 
 function DiscoveryMap({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [time, setTime] = useState(new Date());
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(new Date());
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-  console.log("here");
   const [routeList, setRouteList] = useState([]);
 
   const [newName, setNewName] = useState("");
@@ -46,6 +37,15 @@ function DiscoveryMap({ navigation }) {
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [time, setTime] = useState(new Date());
+  console.log(time);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -115,6 +115,7 @@ function DiscoveryMap({ navigation }) {
     setInitialPosition,
     setFilteredLocations,
     setDiscoveredLegends,
+    time,
   ]);
 
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
