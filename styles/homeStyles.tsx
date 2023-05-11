@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   text: {
     textAlign: "center",
     color: "white",
-    fontFamily: "Poppins-Light",
+    fontFamily: "Poppins-Regular",
     fontSize: 16,
   },
   titleText: {
@@ -28,5 +28,9 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: "#FFE11B",
     fontFamily: "Poppins-Light",
+  },
+  slider: {
+    justifyContent: "center",
+    flexDirection: "row",
   },
 });

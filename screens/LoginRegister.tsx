@@ -9,7 +9,6 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { app } from "../firebaseConfig";
 import {
   getAuth,
@@ -90,10 +89,11 @@ const LoginRegister = () => {
               <Text style={styles.buttonOutlineText}>Register</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.span}>
-            Already have an account?
+          <Text style={styles.span}>Already have an account?</Text>
+          <Text style={styles.link} onPress={() => setIsRegistering(false)}>
+            {" "}
+            Login here!
           </Text>
-          <Text style={styles.link} onPress={() => setIsRegistering(false)}> Login here!</Text>
         </>
       ) : (
         <>
@@ -102,10 +102,10 @@ const LoginRegister = () => {
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.span}>
-            Don't have an account? 
+          <Text style={styles.span}>Don't have an account?</Text>
+          <Text style={styles.link} onPress={() => setIsRegistering(true)}>
+            Register here!
           </Text>
-          <Text style={styles.link} onPress={() => setIsRegistering(true)}>Register here!</Text>
         </>
       )}
     </SafeAreaView>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#2e2e9f"
+    backgroundColor: "#2e2e9f",
   },
   title: {
     fontSize: 45,
@@ -128,9 +128,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: -50,
     marginBottom: 50,
-    textShadowColor: 'black',
+    textShadowColor: "black",
     textShadowOffset: { width: -1, height: 0 },
-    textShadowRadius: 2, 
+    textShadowRadius: 2,
+    fontFamily: "Poppins-Light",
   },
   inputContainer: {
     width: "80%",
@@ -164,7 +165,8 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "700",
     fontSize: 16,
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: "Poppins-Regular",
   },
   buttonOutline: {
     backgroundColor: "#2e2e9f",
