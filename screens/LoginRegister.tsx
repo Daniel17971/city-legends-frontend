@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -64,6 +65,10 @@ const LoginRegister = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>City Legends</Text>
+      <Image
+        source={require("../assets/iconCity.png")}
+        style={{ marginBottom: 20 }}
+      />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -127,11 +132,10 @@ const styles = StyleSheet.create({
     color: "#ffe11b",
     fontWeight: "700",
     marginTop: -50,
-    marginBottom: 50,
+    marginBottom: 20,
     textShadowColor: "black",
     textShadowOffset: { width: -1, height: 0 },
     textShadowRadius: 2,
-    fontFamily: "Poppins-Light",
   },
   inputContainer: {
     width: "80%",
@@ -166,7 +170,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
     textAlign: "center",
-    fontFamily: "Poppins-Regular",
   },
   buttonOutline: {
     backgroundColor: "#2e2e9f",
