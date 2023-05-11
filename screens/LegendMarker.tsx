@@ -1,3 +1,4 @@
+import React from "react";
 import { Marker, Callout } from "react-native-maps";
 import { Image, Text } from "react-native";
 import { useState } from "react";

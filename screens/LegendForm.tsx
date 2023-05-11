@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useContext } from "react";
 import Map from "./Map";
 
@@ -55,45 +56,52 @@ const LegendForm = ({ navigation }) => {
         <Success setSubmited={setSubmited} />
       ) : (
         <>
-          <Text>Create a new Legend</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Title"
-              style={styles.input}
-              value={title}
-              onChangeText={(text) => setTitle(text)}
-            />
-            <TextInput
-              placeholder="Description"
-              multiline
-              numberOfLines={8}
-              style={styles.input}
-              value={description}
-              onChangeText={(text) => setDescription(text)}
-            />
-            <Text>Choose your Legend Location</Text>
-
-            <Text>Choose your Legend Category</Text>
-            <DropDownPicker
-              dropDownContainerStyle={{
-                backgroundColor: "#dfdfdf",
-              }}
-              open={open}
-              value={legendCategory}
-              items={items}
-              setOpen={setOpen}
-              setValue={setLegendCategory}
-              setItems={setItems}
-              bottomOffset={100}
-            />
-            <View style={styles.mapContainer}>
-              <FormMap setUserSelectedLocation={setUserSelectedLocation} userSelectedLocation={userSelectedLocation}/>
+          <View style={styles.formContainer}>
+            <View style={styles.inputsContainer}>
+              <TextInput
+                placeholder="Title"
+                style={styles.input}
+                value={title}
+                onChangeText={(text) => setTitle(text)}
+              />
+              <TextInput
+                placeholder="Description"
+                multiline
+                numberOfLines={8}
+                style={styles.input}
+                value={description}
+                onChangeText={(text) => setDescription(text)}
+              />
+              <DropDownPicker
+                style={styles.input}
+                open={open}
+                value={legendCategory}
+                items={items}
+                placeholder="Select a Legend category"
+                setOpen={setOpen}
+                setValue={setLegendCategory}
+                setItems={setItems}
+                bottomOffset={100}
+              />
+            </View>
+            <View>
+            <Text style={styles.chooseLocation}>
+                  Choose your Legend Location
+                </Text>
+              <View style={styles.mapContainer}>
+               
+                <View>
+                  <FormMap
+                    setUserSelectedLocation={setUserSelectedLocation}
+                    userSelectedLocation={userSelectedLocation}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Create Legend</Text>
+              </TouchableOpacity>
             </View>
           </View>
-
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text>Create</Text>
-          </TouchableOpacity>
         </>
       )}
     </SafeAreaView>
@@ -103,19 +111,37 @@ const LegendForm = ({ navigation }) => {
 export default LegendForm;
 
 const styles = StyleSheet.create({
-  mapContainer: {
-    height: "30%",
-    width: "100%",
-  },
   container: {
     flex: 1,
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     border: "2px solid black",
+    borderColor: "#FFE11B",
+    backgroundColor: "#2E2E9F",
   },
-  inputContainer: {
+  formContainer: {
+    height: "90%",
     width: "90%",
+  },
+  inputsContainer: {
+    zIndex: 9999,
+    width: "90%",
+    alignSelf: "center",
+  },
+  chooseLocation: {
+    fontWeight: "700",
+    color: "#FFE11B",
+    zIndex: 1,
+    padding: 0,
+    alignSelf: "center",
+  },
+  mapContainer: {
+    height: "57%",
+    width: "100%",
+    alignSelf: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
   map: {
     width: "100%",
@@ -126,19 +152,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 5,
-  },
-  inputDesc: {
-    height: "40%",
-  },
-  textThing: {
-    display: "none",
+    marginTop: 2.5,
+    marginBottom: 2.5,
   },
   button: {
-    backgroundColor: "#21aa8a",
+    fontWeight: "700",
+    backgroundColor: "#FF7700",
     width: "90%",
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
     padding: 15,
     borderRadius: 10,
   },
-  dropdown: {},
+  buttonText: {
+    fontWeight: "700"
+  }
 });
+
+
