@@ -16,13 +16,23 @@ function User() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/image1.png")}
-        style={styles.userImage}
+        source={require("../assets/iconCity.png")}
+        style={styles.cityLogo}
       />
       {isEnabled ? (
-        <Text>Discovery mode on</Text>
+        <View style={styles.discoveryModeOn}>
+          <Text style={styles.discoveryModeText}>Discovery mode on</Text>
+          <Text style={styles.text}>
+            Only see legends when you pass them in real life!
+          </Text>
+        </View>
       ) : (
-        <Text>Discovery mode off</Text>
+        <View style={styles.discoveryModeOff}>
+          <Text style={styles.discoveryModeText}>Discovery mode off</Text>
+          <Text style={styles.text}>
+            See all legends within your set radius on the map!
+          </Text>
+        </View>
       )}
 
       <Switch
@@ -32,7 +42,6 @@ function User() {
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
-      <Text>Only see legends when you pass them in real life!</Text>
     </View>
   );
 }
