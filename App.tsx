@@ -75,7 +75,7 @@ export default function App() {
             <Tab.Screen
               name="Map"
               component={MyStack}
-              options={{ title: "Map" }}
+              options={{ title: "Map"}}
             />
             <Tab.Screen
               name="LegendForm"

@@ -114,7 +114,7 @@ const LoginRegister = () => {
 
 export default LoginRegister;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     display: "flex",
@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 45,
     color: "#ffe11b",
-    fontWeight: "700",
     marginTop: -50,
     marginBottom: 50,
     textShadowColor: 'black',
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   },
   link: {
     color: "#ff7700",
-    fontSize: 20,
+    fontSize: 16,
   },
   input: {
     backgroundColor: "white",
@@ -162,9 +161,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "black",
-    fontWeight: "700",
     fontSize: 16,
-    textAlign: "center"
+    textAlign: "center",
   },
   buttonOutline: {
     backgroundColor: "#2e2e9f",
@@ -179,7 +177,6 @@ const styles = StyleSheet.create({
   },
   buttonOutlineText: {
     color: "#ffe11b",
-    fontWeight: "700",
     fontSize: 16,
     textAlign: "center",
   },

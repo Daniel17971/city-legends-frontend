@@ -15,7 +15,7 @@ import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
 import { getLegends } from "../db/api";
 import LegendMarker from "./LegendMarker";
-import { styles } from "../styles/styles";
+import { styles } from "../styles/mapStyles";
 
 function DiscoveryMap({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);

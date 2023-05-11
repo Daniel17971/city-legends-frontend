@@ -28,16 +28,18 @@ export const styles = StyleSheet.create({
   },
   closeBtn: {
     backgroundColor: "red",
+    marginLeft: 5
   },
   textStyle: {
     color: "black",
-    fontWeight: "bold",
     textAlign: "center",
+    fontFamily: "Poppins-Regular",
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-    fontSize: 18
+    fontSize: 18,
+    fontFamily: "Poppins-Regular",
   },
   flexContainer: {
     display: "flex",
