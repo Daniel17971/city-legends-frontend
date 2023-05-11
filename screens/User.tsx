@@ -1,6 +1,7 @@
 import { Text, View, Image, StyleSheet, Switch } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { DiscoveryContext } from "../contexts/discovery";
+import { styles } from "../styles/userStyles";
 function User() {
   const [isEnabled, setIsEnabled] = useState(false);
   const { setDiscoveryModeStatus } = useContext(DiscoveryContext);
@@ -21,7 +22,7 @@ function User() {
       {isEnabled ? (
         <Text>Discovery mode on</Text>
       ) : (
-        <Text>Disovery mode off</Text>
+        <Text>Discovery mode off</Text>
       )}
 
       <Switch
@@ -31,23 +32,9 @@ function User() {
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
-      <Text>List of Created Legends</Text>
-      <Text>List of Created Routes</Text>
+      <Text>Only see legends when you pass them in real life!</Text>
     </View>
   );
 }
 
 export default User;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  userImage: {
-    width: "25%",
-    height: "25%",
-    borderRadius: 20,
-  },
-});
