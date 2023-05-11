@@ -1,4 +1,11 @@
-import { StyleSheet, ScrollView, Text, View, Button } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  Text,
+  View,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Slider from "@react-native-community/slider";
 import { UserContext } from "../contexts/user";
@@ -67,7 +74,10 @@ function Home({ navigation }) {
   }, [setLocation, setFilteredLegends, slidingDone]);
 
   return isLoading ? (
-    <Text>is Loading ...</Text>
+    <View style={styles.loadingPage}>
+      <Text style={styles.loadingText}>Legends loading</Text>
+      <ActivityIndicator animating={true} size={"large"} />
+    </View>
   ) : (
     <View style={styles.page}>
       <View>
@@ -75,6 +85,7 @@ function Home({ navigation }) {
           style={styles.headerText}
           className="mt-2 text-lg text-black dark:text-white"
         >
+          <ActivityIndicator animating={false} size={"large"} />
           Welcome {userEmail} These are your local City Legends !
         </Text>
         <Text style={styles.headerText}>radius : {radius} km</Text>
