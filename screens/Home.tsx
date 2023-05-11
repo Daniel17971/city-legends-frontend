@@ -5,7 +5,7 @@ import { UserContext } from "../contexts/user";
 import { useContext } from "react";
 import { getLegends } from "../db/api";
 import * as Location from "expo-location";
-import { displayDistance, getDistanceFromLatLonInKm } from "../ultils/utils";
+import { getDistanceFromLatLonInKm } from "../ultils/utils";
 import { styles } from "../styles/homeStyles";
 function Home({ navigation }) {
   const { userEmail } = useContext(UserContext);
@@ -104,7 +104,7 @@ function Home({ navigation }) {
               <Text style={styles.titleText}>{legend.title}</Text>
               <Text style={styles.text}>
                 You are{" "}
-                {displayDistance(
+                {getDistanceFromLatLonInKm(
                   location.coords.latitude,
                   location.coords.longitude,
                   legend.location.latitude,
