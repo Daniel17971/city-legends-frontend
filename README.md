@@ -7,6 +7,7 @@ To start interacting with the databases localy you have to create the environmen
 - To create them create a .env file in your project root folder (see .env-example for reference) and include:
   - a variable with the database url
   - a variable with the firebase api key
+  - a variable with the google maps api key
 
 
 
