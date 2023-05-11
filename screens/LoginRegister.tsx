@@ -64,6 +64,7 @@ const LoginRegister = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>City Legends</Text>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
@@ -89,10 +90,10 @@ const LoginRegister = () => {
               <Text style={styles.buttonOutlineText}>Register</Text>
             </TouchableOpacity>
           </View>
-          <Text>
-            Already have an account? Login{" "}
-            <Text style={styles.link} onPress={() => setIsRegistering(false)}>here</Text>!
+          <Text style={styles.span}>
+            Already have an account?
           </Text>
+          <Text style={styles.link} onPress={() => setIsRegistering(false)}> Login here!</Text>
         </>
       ) : (
         <>
@@ -101,10 +102,10 @@ const LoginRegister = () => {
               <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
           </View>
-          <Text>
-            Don't have an account? Register{" "}
-            <Text style={styles.link} onPress={() => setIsRegistering(true)}>here</Text>!
+          <Text style={styles.span}>
+            Don't have an account? 
           </Text>
+          <Text style={styles.link} onPress={() => setIsRegistering(true)}>Register here!</Text>
         </>
       )}
     </SafeAreaView>
@@ -119,12 +120,30 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#2e2e9f"
+  },
+  title: {
+    fontSize: 45,
+    color: "#ffe11b",
+    fontWeight: "700",
+    marginTop: -50,
+    marginBottom: 50,
+    textShadowColor: 'black',
+    textShadowOffset: { width: -1, height: 0 },
+    textShadowRadius: 2, 
   },
   inputContainer: {
     width: "80%",
   },
+  span: {
+    color: "white",
+    marginTop: 15,
+    fontSize: 18,
+    padding: 5,
+  },
   link: {
-    color: "blue",
+    color: "#ff7700",
+    fontSize: 20,
   },
   input: {
     backgroundColor: "white",
@@ -134,21 +153,23 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   button: {
-    backgroundColor: "blue",
+    backgroundColor: "#ffe11b",
     width: "100%",
     padding: 15,
     borderRadius: 10,
+    borderColor: "black",
+    borderWidth: 1,
   },
   buttonText: {
-    color: "white",
+    color: "black",
     fontWeight: "700",
     fontSize: 16,
+    textAlign: "center"
   },
   buttonOutline: {
-    backgroundColor: "white",
-    marginTop: 5,
-    borderColor: "blue",
-    borderWidth: 2,
+    backgroundColor: "#2e2e9f",
+    borderColor: "#ffe11b",
+    borderWidth: 4,
   },
   buttonContainer: {
     width: "60%",
@@ -157,8 +178,9 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   buttonOutlineText: {
-    color: "blue",
+    color: "#ffe11b",
     fontWeight: "700",
     fontSize: 16,
+    textAlign: "center",
   },
 });
