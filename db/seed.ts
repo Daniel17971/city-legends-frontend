@@ -13,6 +13,7 @@ function writeUserData(userId: string, userObj: object) {
 }
 
 const usersIdArr = [];
+const legendCategoryArr = ["myth", "personal","further_back_history", "recent_history"];
 
 function generateTestUsers(numOfUsers: number) {
   for (let i = 0; i < numOfUsers; i++) {
@@ -30,14 +31,14 @@ function generateTestUsers(numOfUsers: number) {
 
 function generateTestLegends(numOfLegends: number) {
   for (let i = 0; i < numOfLegends; i++) {
-    // const legendId = faker.datatype.uuid();
     const coordinates = faker.address.nearbyGPSCoordinate(
-      [52.4128, 1.5090],
-      1
+      [53.4808, 2.2426],
+      2
     );
     const legend = {
       title: faker.lorem.words(Math.floor(Math.random() * 6 + 10)),
-      body: faker.lorem.words(Math.floor(Math.random() * 170 + 31)),
+      body: faker.lorem.words(Math.floor(Math.random() * 150 + 31)),
+      legendCategory: legendCategoryArr[Math.floor(Math.random() * legendCategoryArr.length)],
       location: {
         latitude: coordinates[0],
         longitude: coordinates[1],
@@ -49,4 +50,4 @@ function generateTestLegends(numOfLegends: number) {
 
 // Seed test DB
 // generateTestUsers(3);
-generateTestLegends(3);
+generateTestLegends(20);

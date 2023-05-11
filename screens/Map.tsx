@@ -145,7 +145,7 @@ function Map({ navigation }) {
     if (
       newRouteObj.hasOwnProperty("origin") &&
       newRouteObj.hasOwnProperty("waypoints") &&
-      newName.length
+      newName.length >= 3
     ) {
       setHasSubmitted(true);
       setNewRouteObj((currentObj) => {
@@ -153,7 +153,9 @@ function Map({ navigation }) {
         const name = newName;
         return { name, ...currentObj, destination };
       });
-    } else return;
+    } else {
+      alert("Please fill in all fields.")
+    };
   };
 
   const onConfirmPress = () => {
