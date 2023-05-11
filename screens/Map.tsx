@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import MapView, { Circle } from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";

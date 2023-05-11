@@ -1,6 +1,7 @@
 import { Text, View, Image, StyleSheet, Switch } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import { DiscoveryContext } from "../contexts/discovery";
+import { styles } from "../styles/userStyles";
 function User() {
   const [isEnabled, setIsEnabled] = useState(false);
   const { setDiscoveryModeStatus } = useContext(DiscoveryContext);
@@ -15,13 +16,23 @@ function User() {
   return (
     <View style={styles.container}>
       <Image
-        source={require("../assets/image1.png")}
-        style={styles.userImage}
+        source={require("../assets/iconCity.png")}
+        style={styles.cityLogo}
       />
       {isEnabled ? (
-        <Text>Discovery mode on</Text>
+        <View style={styles.discoveryModeOn}>
+          <Text style={styles.discoveryModeText}>Discovery mode on</Text>
+          <Text style={styles.text}>
+            Only see legends when you pass them in real life!
+          </Text>
+        </View>
       ) : (
-        <Text>Disovery mode off</Text>
+        <View style={styles.discoveryModeOff}>
+          <Text style={styles.discoveryModeText}>Discovery mode off</Text>
+          <Text style={styles.text}>
+            See all legends within your set radius on the map!
+          </Text>
+        </View>
       )}
 
       <Switch
@@ -31,23 +42,8 @@ function User() {
         onValueChange={toggleSwitch}
         value={isEnabled}
       />
-      <Text>List of Created Legends</Text>
-      <Text>List of Created Routes</Text>
     </View>
   );
 }
 
 export default User;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  userImage: {
-    width: "25%",
-    height: "25%",
-    borderRadius: 20,
-  },
-});

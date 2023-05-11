@@ -9,6 +9,7 @@ import {
   View,
   Image,
   TouchableHighlight,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import MapView, { Marker } from "react-native-maps";
@@ -18,8 +19,8 @@ import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
 import { getLegends } from "../db/api";
-
 import LegendMarker from "./LegendMarker";
+import { styles } from "../styles/formMapstyles";
 
 function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
   const [routeList, setRouteList] = useState([]);
@@ -115,11 +116,15 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       {isLoading ? (
-        <Text>... is loading</Text>
+        <View style={styles.formMapLoading}>
+          <Text style={styles.mapLoadingText}>Loading map</Text>
+          <ActivityIndicator animating={true} size={"large"} />
+        </View>
       ) : (
-        <View>
+        <View style={styles.mapContainer}>
+          <ActivityIndicator animating={false} size={"large"} />
           <MapView
             provider={PROVIDER_GOOGLE}
             style={styles.map}
@@ -169,16 +174,3 @@ function FormMap({ setUserSelectedLocation, userSelectedLocation }) {
 }
 
 export default FormMap;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: "100%",
-    height: "100%",
-  },
-  highlightedContainer: {
-    color: "blue",
-  },
-});

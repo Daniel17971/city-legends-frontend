@@ -1,5 +1,7 @@
-import { Marker } from "react-native-maps";
-import { Image } from "react-native";
+import React from "react";
+import { Marker, Callout } from "react-native-maps";
+import { Image, Text } from "react-native";
+import { useState } from "react";
 
 const LegendMarker = ({ index, item, onMarkerPress}) => {
   return (
