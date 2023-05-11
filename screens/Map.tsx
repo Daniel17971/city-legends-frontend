@@ -6,6 +6,7 @@ import {
   View,
   ActivityIndicator,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import MapView, { Circle } from "react-native-maps";
@@ -16,8 +17,9 @@ import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
 import Slider from "@react-native-community/slider";
 import LegendMarker from "./LegendMarker";
+import LegendModal from "../components/LegendModal";
 import { read } from "react-native-fs";
-import { styles } from "../styles/styles";
+import { styles } from "../styles/mapStyles";
 
 import { getLegends, getRoutes } from "../db/api";
 import { postRoutes } from "../db/api";
@@ -34,6 +36,8 @@ function Map({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [slidingDone, setSlidingDone] = useState(true);
   const [routeList, setRouteList] = useState([]);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const [newName, setNewName] = useState("");
   const [isRoutePressed, setIsRoutePressed] = useState(false);
@@ -57,7 +61,6 @@ function Map({ navigation }) {
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
         if (status !== "granted") {
-          console.log("please grant permission");
           return;
         }
       })
@@ -121,6 +124,7 @@ function Map({ navigation }) {
 
   const onMarkerPress = (item) => {
     setSelectedLegend(item);
+    
     if (isRoutePressed) {
       if (!newRouteObj.hasOwnProperty("origin")) {
         setNewRouteObj((currentObj) => {
@@ -137,7 +141,7 @@ function Map({ navigation }) {
         });
       }
     } else {
-      return;
+      setModalVisible(true);
     }
   };
 
@@ -154,8 +158,8 @@ function Map({ navigation }) {
         return { name, ...currentObj, destination };
       });
     } else {
-      alert("Please fill in all fields.")
-    };
+      alert("Please fill in all fields.");
+    }
   };
 
   const onConfirmPress = () => {
@@ -199,32 +203,31 @@ function Map({ navigation }) {
                 style={styles.routeNameInput}
               />
               {hasSubmitted ? (
-                <View style={styles.formButtons}>
-                  <View>
-                    <Button title={"Confirm"} onPress={onConfirmPress} />
-                  </View>
-                </View>
+                <TouchableOpacity
+                  onPress={onConfirmPress}
+                  style={[styles.formButtons, styles.confirmBtn]}
+                >
+                  <Text style={styles.buttonText}>Confirm</Text>
+                </TouchableOpacity>
               ) : (
-                <>
-                  <View style={styles.formButtons}>
-                    <View>
-                      <Button title={"Submit"} onPress={onSubmitPress} />
-                    </View>
-                  </View>
-                </>
+                <TouchableOpacity
+                  onPress={onSubmitPress}
+                  style={[styles.formButtons, styles.submitBtn]}
+                >
+                  <Text style={styles.buttonText}>Submit</Text>
+                </TouchableOpacity>
               )}
-              <>
-                <View style={styles.formButtons}>
-                  <View>
-                    <Button title={"Cancel"} onPress={onCancelPress} />
-                  </View>
-                </View>
-              </>
+              <TouchableOpacity
+                onPress={onCancelPress}
+                style={[styles.formButtons, styles.cancelBtn]}
+              >
+                <Text style={styles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
             </View>
           ) : (
-            <View style={styles.formButtons}>
-              <Button title={"Create route"} onPress={onRoutePress} />
-            </View>
+            <TouchableOpacity onPress={onRoutePress} style={styles.formButtons}>
+              <Text style={styles.buttonText}>Create route</Text>
+            </TouchableOpacity>
           )}
 
           <MapView
@@ -282,39 +285,36 @@ function Map({ navigation }) {
               />
             ) : null}
           </MapView>
-          {selectedLegend ? (
-            <Button
-              title={selectedLegend ? "legend" + selectedLegend.title : ""}
-              onPress={() => {
-                navigation.navigate("LegendPage", {
-                  legend: selectedLegend,
+          <View style={styles.sliderContainer}>
+            <Text style={styles.span}>Adjust Radius of Visible Legends</Text>
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={100}
+              value={radius}
+              minimumTrackTintColor="#ff7700"
+              maximumTrackTintColor="#ffe11b"
+              onValueChange={(event) => {
+                setRadius(event);
+              }}
+              onSlidingComplete={(event) => {
+                setSlidingDone((currentValue) => {
+                  if (currentValue) {
+                    return false;
+                  } else {
+                    return true;
+                  }
                 });
               }}
             />
-          ) : null}
-
-          <Slider
-            style={{ width: 200, height: 40 }}
-            minimumValue={0}
-            maximumValue={100}
-            value={radius}
-            minimumTrackTintColor="#FFFFFF"
-            maximumTrackTintColor="#000000"
-            onValueChange={(event) => {
-              setRadius(event);
-            }}
-            onSlidingComplete={(event) => {
-              setSlidingDone((currentValue) => {
-                if (currentValue) {
-                  return false;
-                } else {
-                  return true;
-                }
-              });
-            }}
-          />
+          </View>
         </View>
       )}
+      <LegendModal
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        selectedLegend={selectedLegend}
+      />
     </View>
   );
 }

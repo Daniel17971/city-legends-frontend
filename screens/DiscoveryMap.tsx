@@ -5,24 +5,17 @@ import {
   TextInput,
   View,
   ActivityIndicator,
-  TouchableHighlight,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import MapView, { Circle } from "react-native-maps";
+import React, {  useEffect, useState } from "react";
+import MapView from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
 import { googleApiKey } from "../env";
 import mapStyle from "../assets/mapStyle.js";
 import { getLegends } from "../db/api";
-import Slider from "@react-native-community/slider";
 import LegendMarker from "./LegendMarker";
-import { read } from "react-native-fs";
 import { styles } from "../styles/styles";
-import { DiscoveryContext } from "../contexts/discovery";
-// import  MarkerClusterer  from "react-native-map-clustering"
-
-// new MarkerClusterer(listOfLocations, Map)
 
 function DiscoveryMap({ navigation }) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -51,7 +44,6 @@ function DiscoveryMap({ navigation }) {
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
         if (status !== "granted") {
-          console.log("please grant permission");
           return;
         }
       })
@@ -64,7 +56,7 @@ function DiscoveryMap({ navigation }) {
       })
       .then((data) => {
         setIsLoading(false);
-        setInitialPosition((currentPostition) => {
+        setInitialPosition((currentPosition) => {
           return {
             latitudeDelta,
             longitudeDelta,
