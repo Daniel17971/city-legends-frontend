@@ -18,7 +18,41 @@ export const getLegends = () => {
 };
 
 export const postLegend = (legend: object) => {
-  return push(ref(db, "legends/"), legend).then((response) => {
-    console.log(response);
-  }).catch(error => alert(error))
+  return push(ref(db, "legends/"), legend)
+    .then((response) => {})
+    .catch((error) => alert(error));
+};
+
+export const getLegendById = (id) => {
+  return get(child(ref(db), `/legends/${id}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        console.log("No data found");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const postRoutes = (route) => {
+  return push(ref(db, "routes/"), route)
+    .then((response) => {})
+    .catch((error) => alert(error));
+};
+
+export const getRoutes = () => {
+  return get(child(ref(db), `/routes`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        console.log("No data found");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };

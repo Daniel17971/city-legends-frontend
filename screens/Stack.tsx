@@ -3,6 +3,9 @@ import LegendPage from "./LegendPage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Map from "./Map";
 import FormMap from "./FormMap";
+import { useContext } from "react";
+import { DiscoveryContext } from "../contexts/discovery";
+
 const Stack = createNativeStackNavigator();
 
 const MyStack = () => {

@@ -1,6 +1,8 @@
 import React from "react";
 import { Marker, Callout } from "react-native-maps";
 import { Image, Text } from "react-native";
+import { useState } from "react";
+
 const LegendMarker = ({ index, item, onMarkerPress }) => {
   return (
     <Marker
@@ -11,16 +13,30 @@ const LegendMarker = ({ index, item, onMarkerPress }) => {
       coordinate={item.location}
       style={{ height: 100, width: 100 }}
     >
-      <Image
-        source={require("../assets/image1.png")}
-        style={{ height: 35, width: 35 }}
-      />
-      <Callout>
-        <Text>{item.title}</Text>
+      {item.legendCategory === "myth" ? (
         <Image
-          source={require("../assets/image1.png")}
+          source={require("../assets/myth.png")}
           style={{ height: 35, width: 35 }}
         />
+      ) : item.legendCategory === "personal" ? (
+        <Image
+          source={require("../assets/personal.png")}
+          style={{ height: 35, width: 35 }}
+        />
+      ) : item.legendCategory === "further_back_history" ? (
+        <Image
+          source={require("../assets/ancientHistory.png")}
+          style={{ height: 35, width: 35 }}
+        />
+      ) : item.legendCategory === "recent_history" ? (
+        <Image
+          source={require("../assets/modernHistory.png")}
+          style={{ height: 35, width: 35 }}
+        />
+      ) : null}
+
+      <Callout>
+        <Text>{item.title}</Text>
       </Callout>
     </Marker>
   );

@@ -1,8 +1,17 @@
 import { Text, View, Image, StyleSheet, Switch } from "react-native";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DiscoveryContext } from "../contexts/discovery";
 function User() {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const { setDiscoveryModeStatus } = useContext(DiscoveryContext);
+  const toggleSwitch = () =>
+    setIsEnabled((previousState) => {
+      return !previousState;
+    });
+  useEffect(() => {
+    setDiscoveryModeStatus(isEnabled);
+  }, [isEnabled]);
+
   return (
     <View style={styles.container}>
       <Image
