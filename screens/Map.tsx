@@ -154,8 +154,8 @@ function Map({ navigation }) {
         return { name, ...currentObj, destination };
       });
     } else {
-      alert("Please fill in all fields.")
-    };
+      alert("Please fill in all fields.");
+    }
   };
 
   const onConfirmPress = () => {
@@ -292,7 +292,7 @@ function Map({ navigation }) {
               }}
             />
           ) : null}
-          
+
           <Slider
             style={{ width: 200, height: 40 }}
             minimumValue={0}
