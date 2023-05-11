@@ -6,7 +6,7 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import MapView from "react-native-maps";
 import { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
@@ -37,6 +37,15 @@ function DiscoveryMap({ navigation }) {
   const [initialPosition, setInitialPosition] = useState(null);
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [time, setTime] = useState(new Date());
+  console.log(time);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date());
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -106,6 +115,7 @@ function DiscoveryMap({ navigation }) {
     setInitialPosition,
     setFilteredLocations,
     setDiscoveredLegends,
+    time,
   ]);
 
   function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
