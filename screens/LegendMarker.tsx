@@ -3,7 +3,7 @@ import { Marker, Callout } from "react-native-maps";
 import { Image, Text } from "react-native";
 import { useState } from "react";
 
-const LegendMarker = ({ index, item, onMarkerPress }) => {
+const LegendMarker = ({ index, item, onMarkerPress}) => {
   return (
     <Marker
       onPress={(event) => {
@@ -34,10 +34,6 @@ const LegendMarker = ({ index, item, onMarkerPress }) => {
           style={{ height: 35, width: 35 }}
         />
       ) : null}
-
-      <Callout>
-        <Text>{item.title}</Text>
-      </Callout>
     </Marker>
   );
 };
